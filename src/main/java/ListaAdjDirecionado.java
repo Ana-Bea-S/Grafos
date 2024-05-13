@@ -200,6 +200,66 @@ public class ListaAdjDirecionado {
 
   }
 
+  public static void buscaLargura(ArrayList<Vertices> grafo, int vertOrigem) {
+    boolean[] visitei = new boolean[grafo.size()];
+    Queue<Integer> busca = new LinkedList<>();
+
+    visitei[vertOrigem - 1] = true;
+    busca.add(vertOrigem);
+
+    System.out.print("Árvore:\n ");
+    while (!busca.isEmpty()) {
+        int vertAtual = busca.poll();
+        System.out.print(vertAtual);
+
+        boolean primVizinho = true;
+        for (Integer vizinho : grafo.get(vertAtual - 1).arestas) {
+            if (!visitei[vizinho - 1]) {
+                if (primVizinho) {
+                    primVizinho = false;
+                    System.out.print(" -> ");
+                } else {
+                    System.out.print(", ");
+                }
+                visitei[vizinho - 1] = true;
+                busca.add(vizinho);
+                System.out.print(vizinho);
+            }
+        }
+        System.out.println();
+    }
+    System.out.println();
+}
+
+public static void buscaProfundidade(ArrayList<Vertices> grafo, int vertOrigem) {
+  boolean[] visitei = new boolean[grafo.size() + 1];
+  int numArvores = 0; // contador para o número de árvores/componentes
+
+  System.out.print("Árvore " + ++numArvores + ": ");
+  pesqProfundidade(grafo, vertOrigem, visitei);
+  System.out.println();
+
+  for (int i = 1; i <= grafo.size(); i++) {
+      if (!visitei[i]) {
+          System.out.print("Árvore " + ++numArvores + ": ");
+          pesqProfundidade(grafo, i, visitei);
+          System.out.println();
+      }
+  }
+}
+
+private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
+  visitei[vertice] = true;
+  System.out.print(vertice + " ");
+
+  for (Integer vizinho : grafo.get(vertice - 1).arestas) {
+      if (!visitei[vizinho]) {
+          System.out.print(" -> ");
+          pesqProfundidade(grafo, vizinho, visitei);
+      }
+  }
+}
+
   public static void menu() {
     Scanner sc = new Scanner(System.in);
 
@@ -243,6 +303,10 @@ public class ListaAdjDirecionado {
       System.out.println("[ 4 ] - Predecessores");
       System.out.println("[ 5 ] - Grau de cada Vértice");
       System.out.println("[ 6 ] - Verificação do Grafo");
+      System.out.println("[ 7 ] - Busca em Largura");
+      System.out.println("[ 8 ] - Busca em Profundidade");
+      System.out.println("[ 9 ] - Ordenação Topológica");
+      System.out.println("[ 10 ] - Caminho mínimo entre dois vértices**");
       System.out.println("[ 0 ] - Sair");
       System.out.println("Qual opção você deseja? ");
       op = sc.nextInt();
@@ -310,6 +374,22 @@ public class ListaAdjDirecionado {
           break;
 
         }
+        case 7: {
+          System.out.println("\n\n");
+          System.out.println("Digite o vértice de início para a busca em largura:");
+          int inicio = sc.nextInt();
+          buscaLargura(grafo, inicio);
+          System.out.println("\n\n\n\n");
+          break;
+      }
+      case 8: {
+        System.out.println("Digite o vértice de início para a busca em profundidade:");
+        int inicio = sc.nextInt();
+        buscaProfundidade(grafo, inicio);
+        System.out.println("\n\n\n\n");
+        break;
+    }
+    
         case 0: {
 
           System.out.println("Até logo!");

@@ -25,14 +25,18 @@ public class Main {
           switch(opp){
             case 1:{
               MatrizAjdDirec.menu();
+              break;
             }
             case 2:{
               MatrizAdjNaoDirec.menu();
+              break;
             }
             default:{
               System.out.println("Opção inválida, tente novamente");
+              break;
             }
           }
+          break;
 
         }
         case 2:{
@@ -46,21 +50,27 @@ public class Main {
           switch(opp){
             case 1:{
               ListaAdjDirecionado.menu();
+              break;
             }
             case 2:{
               ListaAdjNDirec.menu();
+              break;
             }
             default:{
               System.out.println("Opção inválida, tente novamente");
+              break;
             }
           }
+          break;
         }
         case 0:{
 
           System.out.println("Até, logo!");
+          break;
         }
         default: {
           System.out.println("Opção inválida, tente novamente");
+          break;
         }
       }
     }while(op!=0);
