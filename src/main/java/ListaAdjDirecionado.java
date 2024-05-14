@@ -260,6 +260,40 @@ private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boo
   }
 }
 
+public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
+  visitei[vertice] = true;
+
+  for (int i = 0; i < grafo.get(vertice - 1).arestas.size(); i++) {
+      int vizinho = grafo.get(vertice - 1).arestas.get(i);
+      if (!visitei[vizinho]) {
+          dfsConexo(grafo, vizinho, visitei);
+      }
+  }
+}
+
+public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
+  boolean[] visitado = new boolean[numVertices + 1];
+  boolean conexo = true;
+
+  // Realiza a busca em profundidade a partir do primeiro vértice
+  dfsConexo(grafo, 1, visitado);
+
+  // Verifica se todos os vértices foram alcançados
+  for (int i = 1; i <= numVertices; i++) {
+      if (!visitado[i]) {
+          conexo = false; // Grafo não é conexo
+          break;
+      }
+  }
+
+  if (conexo) {
+      System.out.println("O grafo é conexo.");
+  } else {
+      System.out.println("O grafo não é conexo.");
+  }
+}
+
+
   public static void menu() {
     Scanner sc = new Scanner(System.in);
 
@@ -302,10 +336,10 @@ private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boo
       System.out.println("[ 3 ] - Sucessores");
       System.out.println("[ 4 ] - Predecessores");
       System.out.println("[ 5 ] - Grau de cada Vértice");
-      System.out.println("[ 6 ] - Verificação do Grafo");
+      System.out.println("[ 6 ] - Verificação do Grafo (Bipartido)");
       System.out.println("[ 7 ] - Busca em Largura");
       System.out.println("[ 8 ] - Busca em Profundidade");
-      System.out.println("[ 9 ] - Ordenação Topológica");
+      System.out.println("[ 9 ] - Ordenação Topológica**");
       System.out.println("[ 10 ] - Caminho mínimo entre dois vértices**");
       System.out.println("[ 0 ] - Sair");
       System.out.println("Qual opção você deseja? ");
@@ -313,8 +347,6 @@ private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boo
 
       switch (op) {
         case 1: {
-          System.out.println("\n\n");
-
           sc.nextLine();
           System.out.println("Digite a aresta que deseja adicionar - Exemplo: 1,2: ");
           String novaAresta = sc.nextLine();
@@ -326,8 +358,7 @@ private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boo
 
         }
         case 2: {
-          System.out.println("\n\n");
-
+          sc.nextLine();
           System.out.println("Digite a aresta que deseja remover - Exemplo: 1,2: ");
           String removerAresta = sc.nextLine();
           removeAresta(grafo, removerAresta);
@@ -369,6 +400,7 @@ private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boo
           grafoCompleto(grafo, grauTotalV);
           System.out.println("\n");
           // verificação se o grafo é bipartido
+          grafoConexo(grafo, numVertices);
 
           System.out.println("\n\n\n\n");
           break;

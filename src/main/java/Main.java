@@ -3,7 +3,7 @@ import java.util.*;
 public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
-    int op = 0;
+    String op;
 
     do{
       System.out.println("======= MENU =======");
@@ -11,24 +11,24 @@ public class Main {
       System.out.println("[ 2 ] - Lista de Adjacência");
       System.out.println("[ 0 ] - Sair");
       System.out.println("Qual opção você deseja? ");
-      op = sc.nextInt();
+      op = sc.nextLine();
 
       switch (op) {
-        case 1:{
-          int opp = 0;
+        case "1":{
+          String opp;
           System.out.println("======= MENU =======");
           System.out.println("[ 1 ] - Direcionada");
           System.out.println("[ 2 ] - Não-Direcionada");
           System.out.println("Qual opção você deseja? ");
-          opp = sc.nextInt();
+          opp = sc.nextLine();
 
           switch(opp){
-            case 1:{
+            case "1":{
               MatrizAjdDirec.menu();
               break;
             }
-            case 2:{
-              MatrizAdjNaoDirec.menu();
+            case "2":{
+              //MatrizAdjNaoDirec.menu();
               break;
             }
             default:{
@@ -39,21 +39,21 @@ public class Main {
           break;
 
         }
-        case 2:{
-          int opp = 0;
+        case "2":{
+          String opp;
           System.out.println("======= MENU =======");
           System.out.println("[ 1 ] - Direcionada");
           System.out.println("[ 2 ] - Não-Direcionada");
           System.out.println("Qual opção você deseja? ");
-          opp = sc.nextInt();
+          opp = sc.nextLine();
 
           switch(opp){
-            case 1:{
-              ListaAdjDirecionado.menu();
+            case "1":{
+              //ListaAdjDirecionado.menu();
               break;
             }
-            case 2:{
-              ListaAdjNDirec.menu();
+            case "2":{
+              //ListaAdjNDirec.menu();
               break;
             }
             default:{
@@ -63,7 +63,7 @@ public class Main {
           }
           break;
         }
-        case 0:{
+        case "0":{
 
           System.out.println("Até, logo!");
           break;
@@ -73,7 +73,7 @@ public class Main {
           break;
         }
       }
-    }while(op!=0);
+    }while(op!="0");
 
     sc.close();
   }

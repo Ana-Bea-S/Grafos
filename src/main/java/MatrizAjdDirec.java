@@ -10,8 +10,8 @@ public class MatrizAjdDirec {
 
   public static void criaAresta(Grafo grafo, int origem, int destino) {
     try {
-      grafo.matrizAdj[origem][destino] = -1; // aresta que sai do vértice i
-      grafo.matrizAdj[destino][origem] = 1; // aresta que entra no vértice i
+      grafo.matrizAdj[origem][destino] = 1; // aresta que sai do vértice i
+      grafo.matrizAdj[destino][origem] = -1; // aresta que entra no vértice i
     } catch (ArrayIndexOutOfBoundsException index) {
       System.out.println("Vértice não existente");
     }
@@ -22,18 +22,18 @@ public class MatrizAjdDirec {
   }
 
   public static void imprimeGrafo(Grafo grafo, int numVertice) {
-    System.out.println("Matriz Adjacente: \n");
+    System.out.println("Matriz Adjacente:  ");
 
     int maxLength = String.valueOf(numVertice).length();
 
     System.out.print("   ");
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       System.out.printf("%-" + maxLength + "d ", i);
     }
     System.out.println();
 
     System.out.print("---");
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       for (int j = 0; j < maxLength; j++) {
         System.out.print("-");
       }
@@ -41,9 +41,9 @@ public class MatrizAjdDirec {
     }
     System.out.println();
 
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       System.out.printf("%-" + maxLength + "d |", i);
-      for (int j = 1; j <= numVertice; j++) {
+      for (int j = 0; j < numVertice; j++) {
         System.out.printf("%-" + maxLength + "d ", grafo.matrizAdj[i][j]);
       }
       System.out.println();
@@ -235,7 +235,7 @@ public class MatrizAjdDirec {
     visitei[vertOrigem] = true;
     busca.add(vertOrigem);
 
-    System.out.print("Árvore:\n ");
+    System.out.print("Árvore:  ");
     while (!busca.isEmpty()) {
       int vertAtual = busca.poll();
       System.out.print(vertAtual);
@@ -369,18 +369,22 @@ public class MatrizAjdDirec {
 
   public static Grafo ponderador(Grafo g) {
     Scanner sc = new Scanner(System.in);
-    int peso;
+    String peso;
+    System.out.println(g.vertices);
     Grafo copia = new Grafo(g.vertices);
-
     for (int i = 0; i < copia.vertices; i++) {
         for (int j = 0; j < copia.vertices; j++) {
-            if (g.matrizAdj[j][i] == 1) {
+            if (g.matrizAdj[i][j] == 1) {
                 System.out.println("Adicione o peso para " + i + "," + j + ":");
-                peso = sc.nextInt();
-                copia.matrizAdj[j][i] = peso; // Modifica a matriz de adjacência de copia
+                peso = sc.nextLine();
+                copia.matrizAdj[i][j] = Integer.parseInt(peso); // Modifica a matriz de adjacência de copia
+            }
+            else{
+              System.out.println(g.matrizAdj[i][j]);
             }
         }
     }
+    sc.nextLine();
     sc.close();
     return copia;
 }
@@ -391,25 +395,26 @@ public class MatrizAjdDirec {
     Grafo grafo = null;
     try {
       System.out.println("Digite o número de vértices: ");
-      numVertice = sc.nextInt();
+      numVertice = Integer.parseInt(sc.nextLine());
+
       System.out.println("Digite o número de arestas: ");
-      numAresta = sc.nextInt();
+      numAresta = Integer.parseInt(sc.nextLine());
+
 
       grafo = new Grafo(numVertice);
 
       for (int i = 0; i < numAresta; i++) {
         int origem, destino;
         System.out.println("Digite as arestas, formato - 1,2: ");
-        String combinacao = sc.next();
+        String combinacao = sc.nextLine();
         String[] aux = combinacao.split(",");
         origem = Integer.parseInt(aux[0]);
         destino = Integer.parseInt(aux[1]);
 
-        criaAresta(grafo, origem, destino);
+        criaAresta(grafo, origem -1, destino -1);
       }
 
-      System.out.println("\n\n");
-      int op = 0;
+      String op;
       do {
         System.out.println("======= MENU =======");
         System.out.println("[ 1 ] - Criar Arestas");
@@ -425,136 +430,136 @@ public class MatrizAjdDirec {
         System.out.println("[ 11 ] - Caminho mínimo entre dois vértices**");
         System.out.println("[ 0 ] - Sair");
         System.out.println("Qual opção você deseja? ");
-        op = sc.nextInt();
-
+        op = sc.nextLine();
         switch (op) {
-          case 1: {
-            System.out.println("\n\n");
+          case "1": {
+              
             int origem, destino;
             System.out.println("Digite a aresta que deseja adicionar, formato - 1,2: ");
-            String combinacao = sc.next();
+            String combinacao = sc.nextLine();
             String[] aux = combinacao.split(",");
             origem = Integer.parseInt(aux[0]);
             destino = Integer.parseInt(aux[1]);
 
-            criaAresta(grafo, origem, destino);
-            System.out.println("\n\n\n\n");
+            criaAresta(grafo, origem -1, destino -1);
+             
             break;
           }
-          case 2: {
-            System.out.println("\n\n");
+          case "2": {
+              
             int origem, destino;
             System.out.println("Digite a aresta que deseja remover, formato - 1,2: ");
-            String combinacao = sc.next();
+            String combinacao = sc.nextLine();
             String[] aux = combinacao.split(",");
             origem = Integer.parseInt(aux[0]);
             destino = Integer.parseInt(aux[1]);
-            removeAresta(grafo, origem, destino);
-            System.out.println("\n\n\n\n");
+            removeAresta(grafo, origem -1, destino -1);
+             
             break;
           }
-          case 3: {
-            System.out.println("\n\n");
+          case "3": {
+              
 
             imprimeGrafo(grafo, numVertice);
 
-            System.out.println("\n\n\n\n");
+             
             break;
           }
-          case 4: {
-            System.out.println("\n\n");
+          case "4": {
+              
 
             imprimeSucessores(grafo, numVertice);
 
-            System.out.println("\n\n\n\n");
+             
             break;
           }
-          case 5: {
-            System.out.println("\n\n");
+          case "5": {
+              
 
             imprimePredecessores(grafo, numVertice);
 
-            System.out.println("\n\n\n\n");
+             
             break;
           }
-          case 6: {
-            System.out.println("\n\n");
+          case "6": {
+              
 
             grauVertice(grafo, numVertice);
-            System.out.println("\n\n\n\n");
+             
             break;
           }
-          case 7: {
-            System.out.println("\n\n");
+          case "7": {
+              
             // verificar se é simples
             grafoSimples(grafo, numVertice);
-            System.out.println("\n\n");
+              
             // verificar se é completo
             grafoCompleto(grafo, numVertice);
-            System.out.println("\n\n");
+              
             // verificar se é regular
             grafoRegular(grafo, numVertice);
-            System.out.println("\n\n");
+              
             // verificar se é bipartido
             grafoBipartido(grafo, numVertice);
-            System.out.println("\n\n");
+              
             // verificar se é conexo
             grafoConexo(grafo, numVertice);
-            System.out.println("\n\n\n\n");
+             
             break;
           }
-          case 8: {
-            System.out.println("\n");
+          case "8": {
+               
             System.out.println("Digite o vértice em que deseja iniciar sua busca em largura: ");
-            int vertOrigem = sc.nextInt();
-            System.out.print("Busca em Largura: \n");
+            int vertOrigem = Integer.parseInt(sc.nextLine());
+
+            System.out.print("Busca em Largura:  ");
             buscaLargura(grafo, vertOrigem, numVertice);
-            System.out.println("\n\n\n\n");
+             
             break;
           }
-          case 9: {
-            System.out.println("\n");
+          case "9": {
+               
             System.out.println("Digite o vértice em que deseja iniciar sua busca em profundidade: ");
-            int vertOrigem = sc.nextInt();
-            System.out.print("Busca em Profundidade: \n");
+            int vertOrigem = Integer.parseInt(sc.nextLine());
+
+            System.out.print("Busca em Profundidade:  ");
             buscaProfundidade(grafo, vertOrigem, numVertice);
-            System.out.println("\n\n\n\n");
+             
             break;
           }
-          case 10: {
-            System.out.println("\n");
+          case "10": {
+               
             ordenacaoTopologica(grafo, numVertice);
-            System.out.println("\n\n");
+              
             break;
           }
-          case 11: {
-            System.out.println("\n");
+          case "11": {
             Grafo copia = ponderador(grafo);
+
             System.out.println("Digite o vértice de origem para o algoritmo de Dijkstra: ");
-            int vertOrigem = sc.nextInt();
+            int vertOrigem = Integer.parseInt(sc.nextLine());
+
             System.out.println("Digite o vértice de destino para o algoritmo de Dijkstra: ");
-            int vertDestino = sc.nextInt();
+            int vertDestino = Integer.parseInt(sc.nextLine());
+
             dijkstra(copia, vertOrigem, vertDestino, numVertice);
 
-            System.out.println("\n\n\n\n");
-
             break;
           }
-          case 0: {
+          case "0": {
             System.out.println("Até logo!");
             break;
           }
           default: {
             System.out.println("Opção inválida, tente novamente");
-            System.out.println("\n\n");
             break;
           }
         }
 
-      } while (op != 0);
+      } while (op != "0");
 
     } catch (Exception E) {
-      System.out.println("Erro!");
+      System.out.println(E.getMessage());
     }
 
     sc.close();

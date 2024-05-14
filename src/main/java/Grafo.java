@@ -4,6 +4,6 @@ public class Grafo {
 
   public Grafo(int v) {
     this.vertices = v;
-    matrizAdj = new int[vertices + 1][vertices + 1];
+    matrizAdj = new int[vertices][vertices];
   }
 }
