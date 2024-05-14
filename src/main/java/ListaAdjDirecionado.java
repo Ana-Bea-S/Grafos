@@ -2,13 +2,13 @@ import java.util.*;
 
 public class ListaAdjDirecionado {
   public static void adicionaAresta(ArrayList<Vertices> grafo, String aresta) {
-      String[] aux = aresta.split(",");
+    String[] aux = aresta.split(",");
 
-      int origem = Integer.parseInt(aux[0]) - 1;
-      int destino = Integer.parseInt(aux[1]) - 1;
+    int origem = Integer.parseInt(aux[0]) - 1;
+    int destino = Integer.parseInt(aux[1]) - 1;
 
-      grafo.get(origem).arestas.add(destino + 1);
-    }
+    grafo.get(origem).arestas.add(destino + 1);
+  }
 
   public static void removeAresta(ArrayList<Vertices> grafo, String aresta) {
     String[] aux = aresta.split(",");
@@ -209,90 +209,89 @@ public class ListaAdjDirecionado {
 
     System.out.print("Árvore:\n ");
     while (!busca.isEmpty()) {
-        int vertAtual = busca.poll();
-        System.out.print(vertAtual);
+      int vertAtual = busca.poll();
+      System.out.print(vertAtual);
 
-        boolean primVizinho = true;
-        for (Integer vizinho : grafo.get(vertAtual - 1).arestas) {
-            if (!visitei[vizinho - 1]) {
-                if (primVizinho) {
-                    primVizinho = false;
-                    System.out.print(" -> ");
-                } else {
-                    System.out.print(", ");
-                }
-                visitei[vizinho - 1] = true;
-                busca.add(vizinho);
-                System.out.print(vizinho);
-            }
+      boolean primVizinho = true;
+      for (Integer vizinho : grafo.get(vertAtual - 1).arestas) {
+        if (!visitei[vizinho - 1]) {
+          if (primVizinho) {
+            primVizinho = false;
+            System.out.print(" -> ");
+          } else {
+            System.out.print(", ");
+          }
+          visitei[vizinho - 1] = true;
+          busca.add(vizinho);
+          System.out.print(vizinho);
         }
-        System.out.println();
+      }
+      System.out.println();
     }
     System.out.println();
-}
+  }
 
-public static void buscaProfundidade(ArrayList<Vertices> grafo, int vertOrigem) {
-  boolean[] visitei = new boolean[grafo.size() + 1];
-  int numArvores = 0; // contador para o número de árvores/componentes
+  public static void buscaProfundidade(ArrayList<Vertices> grafo, int vertOrigem) {
+    boolean[] visitei = new boolean[grafo.size() + 1];
+    int numArvores = 0; // contador para o número de árvores/componentes
 
-  System.out.print("Árvore " + ++numArvores + ": ");
-  pesqProfundidade(grafo, vertOrigem, visitei);
-  System.out.println();
+    System.out.print("Árvore " + ++numArvores + ": ");
+    pesqProfundidade(grafo, vertOrigem, visitei);
+    System.out.println();
 
-  for (int i = 1; i <= grafo.size(); i++) {
+    for (int i = 1; i <= grafo.size(); i++) {
       if (!visitei[i]) {
-          System.out.print("Árvore " + ++numArvores + ": ");
-          pesqProfundidade(grafo, i, visitei);
-          System.out.println();
+        System.out.print("Árvore " + ++numArvores + ": ");
+        pesqProfundidade(grafo, i, visitei);
+        System.out.println();
       }
+    }
   }
-}
 
-private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
-  visitei[vertice] = true;
-  System.out.print(vertice + " ");
+  private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
+    visitei[vertice] = true;
+    System.out.print(vertice + " ");
 
-  for (Integer vizinho : grafo.get(vertice - 1).arestas) {
+    for (Integer vizinho : grafo.get(vertice - 1).arestas) {
       if (!visitei[vizinho]) {
-          System.out.print(" -> ");
-          pesqProfundidade(grafo, vizinho, visitei);
+        System.out.print(" -> ");
+        pesqProfundidade(grafo, vizinho, visitei);
       }
+    }
   }
-}
 
-public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
-  visitei[vertice] = true;
+  public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
+    visitei[vertice] = true;
 
-  for (int i = 0; i < grafo.get(vertice - 1).arestas.size(); i++) {
+    for (int i = 0; i < grafo.get(vertice - 1).arestas.size(); i++) {
       int vizinho = grafo.get(vertice - 1).arestas.get(i);
       if (!visitei[vizinho]) {
-          dfsConexo(grafo, vizinho, visitei);
+        dfsConexo(grafo, vizinho, visitei);
       }
+    }
   }
-}
 
-public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
-  boolean[] visitado = new boolean[numVertices + 1];
-  boolean conexo = true;
+  public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
+    boolean[] visitado = new boolean[numVertices + 1];
+    boolean conexo = true;
 
-  // Realiza a busca em profundidade a partir do primeiro vértice
-  dfsConexo(grafo, 1, visitado);
+    // Realiza a busca em profundidade a partir do primeiro vértice
+    dfsConexo(grafo, 1, visitado);
 
-  // Verifica se todos os vértices foram alcançados
-  for (int i = 1; i <= numVertices; i++) {
+    // Verifica se todos os vértices foram alcançados
+    for (int i = 1; i <= numVertices; i++) {
       if (!visitado[i]) {
-          conexo = false; // Grafo não é conexo
-          break;
+        conexo = false; // Grafo não é conexo
+        break;
       }
-  }
+    }
 
-  if (conexo) {
+    if (conexo) {
       System.out.println("O grafo é conexo.");
-  } else {
+    } else {
       System.out.println("O grafo não é conexo.");
+    }
   }
-}
-
 
   public static void menu() {
     Scanner sc = new Scanner(System.in);
@@ -351,7 +350,7 @@ public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
           System.out.println("Digite a aresta que deseja adicionar - Exemplo: 1,2: ");
           String novaAresta = sc.nextLine();
           adicionaAresta(grafo, novaAresta);
-          
+
           System.out.println("\n\n\n\n");
 
           break;
@@ -413,15 +412,15 @@ public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
           buscaLargura(grafo, inicio);
           System.out.println("\n\n\n\n");
           break;
-      }
-      case 8: {
-        System.out.println("Digite o vértice de início para a busca em profundidade:");
-        int inicio = sc.nextInt();
-        buscaProfundidade(grafo, inicio);
-        System.out.println("\n\n\n\n");
-        break;
-    }
-    
+        }
+        case 8: {
+          System.out.println("Digite o vértice de início para a busca em profundidade:");
+          int inicio = sc.nextInt();
+          buscaProfundidade(grafo, inicio);
+          System.out.println("\n\n\n\n");
+          break;
+        }
+
         case 0: {
 
           System.out.println("Até logo!");

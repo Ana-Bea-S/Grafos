@@ -53,19 +53,19 @@ public class MatrizAjdDirec {
   public static void grauVertice(Grafo grafo, int numVertice) {
     for (int i = 0; i <  numVertice; i++) {
       int grau = 0;
-      for (int j = 1; j <= numVertice; j++) {
+      for (int j = 0; j < numVertice; j++) {
         grau += Math.abs(grafo.matrizAdj[i][j]);
       }
-      System.out.println("Grau do vértice " + i + ": " + grau);
+      System.out.println("Grau do vértice " + ++i + ": " + grau);
     }
   }
 
   public static void imprimeSucessores(Grafo grafo, int numVertice) {
     for (int i = 0; i <  numVertice; i++) {
-      System.out.print("Sucessores do vértice " + i + ": ");
-      for (int j = 1; j <= numVertice; j++) {
+      System.out.print("Sucessores do vértice " + (i+1) + ": ");
+      for (int j = 0; j < numVertice; j++) {
         if (grafo.matrizAdj[i][j] == 1) {
-          System.out.print(j + " ");
+          System.out.print(j+1 + " ");
         }
       }
       System.out.println();
@@ -74,10 +74,10 @@ public class MatrizAjdDirec {
 
   public static void imprimePredecessores(Grafo grafo, int numVertice) {
     for (int i = 0; i <  numVertice; i++) {
-      System.out.print("Predecessores do vértice " + i + ": ");
-      for (int j = 1; j <= numVertice; j++) {
+      System.out.print("Predecessores do vértice " + (i+1) + ": ");
+      for (int j = 0; j < numVertice; j++) {
         if (grafo.matrizAdj[i][j] == -1) {
-          System.out.print(j + " ");
+          System.out.print(j+1 + " ");
         }
       }
       System.out.println();
@@ -87,7 +87,7 @@ public class MatrizAjdDirec {
   public static void grafoSimples(Grafo grafo, int numVertice) {
     boolean simples = true;
     for (int i = 0; i <  numVertice; i++) {
-      for (int j = 1; j <= numVertice; j++) {
+      for (int j = 0; j < numVertice; j++) {
         if (i != j && Math.abs(grafo.matrizAdj[i][j]) != 1 && grafo.matrizAdj[i][j] != 0) {
           simples = false;
           break;
@@ -114,7 +114,7 @@ public class MatrizAjdDirec {
   public static void grafoCompleto(Grafo grafo, int numVertice) {
     boolean completo = true;
     for (int i = 0; i <  numVertice; i++) {
-      for (int j = 1; j <= numVertice; j++) {
+      for (int j = 0; j < numVertice; j++) {
         if (i != j && grafo.matrizAdj[i][j] != -1 && grafo.matrizAdj[i][j] != 1) {
           completo = false;
           break;
@@ -134,13 +134,13 @@ public class MatrizAjdDirec {
   public static void grafoRegular(Grafo grafo, int numVertice) {
     boolean regular = true;
     int grau = 0;
-    for (int j = 1; j <= numVertice; j++) {
+    for (int j = 0; j < numVertice; j++) {
       grau += Math.abs(grafo.matrizAdj[1][j]);
     }
 
     for (int i = 2; i <  numVertice; i++) {
       int grauAtual = 0;
-      for (int j = 1; j <= numVertice; j++) {
+      for (int j = 0; j < numVertice; j++) {
         grauAtual += Math.abs(grafo.matrizAdj[i][j]);
       }
       if (grauAtual != grau) {
@@ -166,7 +166,7 @@ public class MatrizAjdDirec {
 
     // Inicia a busca em largura em todos os vértices
     for (int i = 0; i <  numVertice; i++) {
-      if (cor[i] == -1) { // Se o vértice ainda não foi visitei, inicia a BFS a partir dele
+      if (cor[i] == -1) { // Se o vértice ainda não foi visitado, inicia a BFS a partir dele
         cor[i] = 1; // Define a cor do vértice inicial como 1
         Queue<Integer> fila = new LinkedList<>();
         fila.add(i); // Adiciona o vértice à fila
@@ -177,7 +177,7 @@ public class MatrizAjdDirec {
 
           // Percorre todos os vértices adjacentes de u
           for (int v = 1; v <= numVertice; v++) {
-            // Se existir uma aresta entre u e v e v ainda não foi visitei
+            // Se existir uma aresta entre u e v e v ainda não foi visitado
             if (grafo.matrizAdj[u][v] == -1 && cor[v] == -1) {
               cor[v] = 1 - cor[u]; // Atribui a cor oposta ao vértice v
               fila.add(v); // Adiciona v à fila para explorar seus vizinhos
@@ -218,7 +218,7 @@ public class MatrizAjdDirec {
 
   private static void pesqProfundidade(Grafo grafo, int vertice, boolean[] visitei) {
     visitei[vertice] = true;
-    System.out.print(vertice + " ");
+    System.out.print(++vertice + " ");
 
     for (int i = 0; i < grafo.matrizAdj.length; i++) {
       if (grafo.matrizAdj[vertice][i] == -1 && !visitei[i]) {
@@ -238,7 +238,7 @@ public class MatrizAjdDirec {
     System.out.print("Árvore:  ");
     while (!busca.isEmpty()) {
       int vertAtual = busca.poll();
-      System.out.print(vertAtual);
+      System.out.print(++vertAtual);
 
       boolean primVizinho = true;
       for (int i = 0; i <  numVertices; i++) {
@@ -251,7 +251,7 @@ public class MatrizAjdDirec {
           }
           visitei[i] = true;
           busca.add(i);
-          System.out.print(i);
+          System.out.print(++i);
         }
       }
       System.out.println();
@@ -298,7 +298,7 @@ public class MatrizAjdDirec {
 
     System.out.println("Ordenação Topológica:");
     while (!pilha.isEmpty()) {
-      System.out.print(pilha.pop());
+      System.out.print(pilha.pop()+1);
       if (!pilha.isEmpty()) {
         System.out.print(" -> ");
       }
@@ -361,9 +361,9 @@ public class MatrizAjdDirec {
     }
 
     if (distancias[destino] == Integer.MAX_VALUE) {
-      System.out.println("Não há caminho de " + origem + " para " + destino);
+      System.out.println("Não há caminho de " + ++origem + " para " + ++destino);
     } else {
-      System.out.println("Distância mínima de " + origem + " para " + destino + ": " + distancias[destino]);
+      System.out.println("Distância mínima de " + ++origem + " para " + ++destino + ": " + distancias[destino]);
     }
   }
 
@@ -375,12 +375,9 @@ public class MatrizAjdDirec {
     for (int i = 0; i < copia.vertices; i++) {
         for (int j = 0; j < copia.vertices; j++) {
             if (g.matrizAdj[i][j] == 1) {
-                System.out.println("Adicione o peso para " + i + "," + j + ":");
+                System.out.println("Adicione o peso para " + ++i + "," + ++j + ":");
                 peso = sc.nextLine();
                 copia.matrizAdj[i][j] = Integer.parseInt(peso); // Modifica a matriz de adjacência de copia
-            }
-            else{
-              System.out.println(g.matrizAdj[i][j]);
             }
         }
     }
