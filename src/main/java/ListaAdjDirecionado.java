@@ -123,36 +123,39 @@ public class ListaAdjDirecionado {
 
   public static void grafoSimples(ArrayList<Vertices> grafo) {
     boolean simples = true;
-    for (int i = 0; i < grafo.size(); i++) {
-      Vertices vertice = grafo.get(i);
-      ArrayList<Integer> arestas = vertice.arestas;
 
-      // Verifica se não existe duplicação entre as arestas, se tiver, não é um grafo
-      // simples
-      for (int j = 0; j < arestas.size() - 1; j++) {
-        for (int k = j + 1; k < arestas.size(); k++) {
-          if (arestas.get(j).equals(arestas.get(k))) {
+    for (int i = 0; i < grafo.size(); i++) {
+        Vertices vertice = grafo.get(i);
+        ArrayList<Integer> arestas = vertice.arestas;
+
+        // Verifica duplicação entre as arestas
+        for (int j = 0; j < arestas.size() - 1; j++) {
+            for (int k = j + 1; k < arestas.size(); k++) {
+                if (arestas.get(j).equals(arestas.get(k))) {
+                    simples = false;
+                    break;
+                }
+            }
+            if (!simples) {
+                break; 
+            }
+        }
+
+        // Verifica se há laço
+        if (arestas.contains(vertice.rotulo)) {
             simples = false;
             break;
-          }
         }
-      }
-
-      // verifica se tem laço, ou seja, se um vertice se conecta a ele mesmo, se
-      // tiver, não é um grafo simples
-      if (arestas.contains(vertice.rotulo)) {
-        simples = false;
-        break;
-      }
     }
 
     if (!simples) {
-      System.out.println("Não é um grafo simples");
+        System.out.println("Não é um grafo simples");
     } else {
-      System.out.println("É um grafo simples");
+        System.out.println("É um grafo simples");
     }
     System.out.println();
-  }
+}
+
 
   public static void grafoRegular(ArrayList<Vertices> grafo, int[] grauTotalV) {
     boolean regular = true;
