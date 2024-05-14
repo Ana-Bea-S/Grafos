@@ -51,7 +51,7 @@ public class MatrizAjdDirec {
   }
 
   public static void grauVertice(Grafo grafo, int numVertice) {
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i <  numVertice; i++) {
       int grau = 0;
       for (int j = 1; j <= numVertice; j++) {
         grau += Math.abs(grafo.matrizAdj[i][j]);
@@ -61,7 +61,7 @@ public class MatrizAjdDirec {
   }
 
   public static void imprimeSucessores(Grafo grafo, int numVertice) {
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i <  numVertice; i++) {
       System.out.print("Sucessores do vértice " + i + ": ");
       for (int j = 1; j <= numVertice; j++) {
         if (grafo.matrizAdj[i][j] == -1) {
@@ -73,7 +73,7 @@ public class MatrizAjdDirec {
   }
 
   public static void imprimePredecessores(Grafo grafo, int numVertice) {
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i <  numVertice; i++) {
       System.out.print("Predecessores do vértice " + i + ": ");
       for (int j = 1; j <= numVertice; j++) {
         if (grafo.matrizAdj[i][j] == 1) {
@@ -86,7 +86,7 @@ public class MatrizAjdDirec {
 
   public static void grafoSimples(Grafo grafo, int numVertice) {
     boolean simples = true;
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i <  numVertice; i++) {
       for (int j = 1; j <= numVertice; j++) {
         if (i != j && Math.abs(grafo.matrizAdj[i][j]) != 1 && grafo.matrizAdj[i][j] != 0) {
           simples = false;
@@ -98,7 +98,7 @@ public class MatrizAjdDirec {
       }
     }
     // Verifica loops
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i <  numVertice; i++) {
       if (grafo.matrizAdj[i][i] != 0) {
         simples = false;
         break;
@@ -113,7 +113,7 @@ public class MatrizAjdDirec {
 
   public static void grafoCompleto(Grafo grafo, int numVertice) {
     boolean completo = true;
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i <  numVertice; i++) {
       for (int j = 1; j <= numVertice; j++) {
         if (i != j && grafo.matrizAdj[i][j] != -1 && grafo.matrizAdj[i][j] != 1) {
           completo = false;
@@ -138,7 +138,7 @@ public class MatrizAjdDirec {
       grau += Math.abs(grafo.matrizAdj[1][j]);
     }
 
-    for (int i = 2; i <= numVertice; i++) {
+    for (int i = 2; i <  numVertice; i++) {
       int grauAtual = 0;
       for (int j = 1; j <= numVertice; j++) {
         grauAtual += Math.abs(grafo.matrizAdj[i][j]);
@@ -160,12 +160,12 @@ public class MatrizAjdDirec {
     int[] cor = new int[numVertice + 1]; // Array para armazenar a cor de cada vértice (1 e -1)
 
     // Inicializa todas as cores como não visitadas (-1)
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i <  numVertice; i++) {
       cor[i] = -1;
     }
 
     // Inicia a busca em largura em todos os vértices
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i <  numVertice; i++) {
       if (cor[i] == -1) { // Se o vértice ainda não foi visitei, inicia a BFS a partir dele
         cor[i] = 1; // Define a cor do vértice inicial como 1
         Queue<Integer> fila = new LinkedList<>();
@@ -206,7 +206,7 @@ public class MatrizAjdDirec {
       System.out.println();
     }
 
-    for (int i = 1; i <= numVertices; i++) {
+    for (int i = 0; i <  numVertices; i++) {
       if (!visitei[i]) {
         numArvores++;
         System.out.print("Árvore " + numArvores + ": ");
@@ -220,7 +220,7 @@ public class MatrizAjdDirec {
     visitei[vertice] = true;
     System.out.print(vertice + " ");
 
-    for (int i = 1; i < grafo.matrizAdj.length; i++) {
+    for (int i = 0; i < grafo.matrizAdj.length; i++) {
       if (grafo.matrizAdj[vertice][i] == -1 && !visitei[i]) {
         System.out.print(" -> ");
         pesqProfundidade(grafo, i, visitei);
@@ -241,7 +241,7 @@ public class MatrizAjdDirec {
       System.out.print(vertAtual);
 
       boolean primVizinho = true;
-      for (int i = 1; i <= numVertices; i++) {
+      for (int i = 0; i <  numVertices; i++) {
         if (grafo.matrizAdj[vertAtual][i] == -1 && !visitei[i]) {
           if (primVizinho) {
             primVizinho = false;
@@ -272,7 +272,7 @@ public class MatrizAjdDirec {
     visitei[vertice] = true;
     pilhaRec[vertice] = true;
 
-    for (int i = 1; i < grafo.matrizAdj.length; i++) {
+    for (int i = 0; i < grafo.matrizAdj.length; i++) {
       if (grafo.matrizAdj[vertice][i] == -1 && dfsTopologico(grafo, i, visitei, pilhaRec, pilha)) {
         return true; // Ciclo encontrado
       }
@@ -289,7 +289,7 @@ public class MatrizAjdDirec {
     boolean[] visitei = new boolean[numVertices + 1];
     boolean[] pilhaRec = new boolean[numVertices + 1];
 
-    for (int i = 1; i <= numVertices; i++) {
+    for (int i = 0; i <  numVertices; i++) {
       if (!visitei[i] && dfsTopologico(grafo, i, visitei, pilhaRec, pilha)) {
         System.out.println("O grafo contém um ciclo!");
         return;
@@ -309,7 +309,7 @@ public class MatrizAjdDirec {
   public static void dfsConexo(Grafo grafo, int vertice, boolean[] visitei) {
     visitei[vertice] = true;
 
-    for (int i = 1; i < grafo.matrizAdj.length; i++) {
+    for (int i = 0; i < grafo.matrizAdj.length; i++) {
       if (grafo.matrizAdj[vertice][i] == -1 && !visitei[i]) {
         dfsConexo(grafo, i, visitei);
       }
@@ -324,7 +324,7 @@ public class MatrizAjdDirec {
     dfsConexo(grafo, 1, visitado);
 
     // Verifica se todos os vértices foram alcançados
-    for (int i = 1; i <= numVertices; i++) {
+    for (int i = 0; i <  numVertices; i++) {
       if (!visitado[i]) {
         conexo = false; // Grafo não é conexo
         break;
@@ -349,7 +349,7 @@ public class MatrizAjdDirec {
     while (!fila.isEmpty()) {
       int u = fila.poll();
 
-      for (int v = 1; v <= numVertices; v++) {
+      for (int v = 0; v < numVertices; v++) {
         if (grafo.matrizAdj[u][v] == -1) {
           int peso = grafo.matrizAdj[u][v]; 
           if (distancias[v] > distancias[u] + peso) {
@@ -384,8 +384,6 @@ public class MatrizAjdDirec {
             }
         }
     }
-    sc.nextLine();
-    sc.close();
     return copia;
 }
 
