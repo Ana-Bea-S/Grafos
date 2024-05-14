@@ -560,6 +560,5 @@ public class MatrizAjdDirec {
       System.out.println(E.getMessage());
     }
 
-    sc.close();
   }
 }
