@@ -28,7 +28,7 @@ public class Main {
               break;
             }
             case "2":{
-              //MatrizAdjNaoDirec.menu();
+              MatrizAdjNaoDirec.menu();
               break;
             }
             default:{

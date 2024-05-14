@@ -372,9 +372,9 @@ public class MatrizAjdDirec {
     for (int i = 0; i < copia.vertices; i++) {
         for (int j = 0; j < copia.vertices; j++) {
             if (g.matrizAdj[i][j] == 1) {
-                System.out.println("Adicione o peso para " + ++i + "," + ++j + ":");
+                System.out.println("Adicione o peso para " + (i+1) + "," + (j+1) + ":");
                 peso = sc.nextLine();
-                copia.matrizAdj[i][j] = Integer.parseInt(peso); // Modifica a matriz de adjacência de copia
+                copia.matrizAdj[i][j] = Integer.parseInt(peso); 
             }
         }
     }

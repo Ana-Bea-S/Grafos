@@ -274,6 +274,5 @@ public class MatrizAdjNaoDirec {
       System.out.println("Erro!");
     }
 
-    sc.close();
   }
 }

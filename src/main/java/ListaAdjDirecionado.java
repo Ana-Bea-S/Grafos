@@ -261,34 +261,32 @@ public class ListaAdjDirecionado {
   }
 
   public static boolean dfsTopologico(ArrayList<Vertices> grafo, int vertice, boolean[] visitei, boolean[] pilhaRec,
-  Stack<Integer> pilha) {
-int indice = vertice - 1; // Obtém o índice real do vértice
+      Stack<Integer> pilha) {
+    int indice = vertice - 1; // Obtém o índice real do vértice
 
-if (pilhaRec[indice]) {
-  return true; // Ciclo encontrado
-}
-
-if (visitei[indice]) {
-  return false; // Já foi visitado e não forma ciclo
-}
-
-visitei[indice] = true;
-pilhaRec[indice] = true;
-
-for (int i = 0; i < grafo.get(indice).arestas.size(); i++) {
-  int vizinho = grafo.get(indice).arestas.get(i);
-  if (dfsTopologico(grafo, vizinho, visitei, pilhaRec, pilha)) {
+    if (pilhaRec[indice]) {
       return true; // Ciclo encontrado
+    }
+
+    if (visitei[indice]) {
+      return false; // Já foi visitado e não forma ciclo
+    }
+
+    visitei[indice] = true;
+    pilhaRec[indice] = true;
+
+    for (int i = 0; i < grafo.get(indice).arestas.size(); i++) {
+      int vizinho = grafo.get(indice).arestas.get(i);
+      if (dfsTopologico(grafo, vizinho, visitei, pilhaRec, pilha)) {
+        return true; // Ciclo encontrado
+      }
+    }
+
+    pilhaRec[indice] = false;
+    pilha.push(vertice);
+
+    return false;
   }
-}
-
-pilhaRec[indice] = false;
-pilha.push(vertice);
-
-return false;
-}
-
-
 
   public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
     visitei[vertice] = true;
@@ -322,6 +320,30 @@ return false;
       System.out.println("O grafo não é conexo.");
     }
   }
+
+  public static ArrayList<Vertices> ponderador(ArrayList<Vertices> grafo) {
+    Scanner sc = new Scanner(System.in);
+
+
+    ArrayList<Vertices> copia = new ArrayList<>(grafo.size());
+
+
+    for (Vertices vertice : grafo) {
+      copia.add(new Vertices(vertice.rotulo));
+    }
+
+    for (int i = 0; i < copia.size(); i++) {
+      Vertices vertice = copia.get(i);
+      for (Integer vizinho : vertice.arestas) {
+        System.out.println("Adicione o peso para " + (vertice.rotulo) + "," + (vizinho + 1) + ":");
+        String peso = sc.nextLine();
+        copia.get(i).arestas.add(Integer.parseInt(peso));
+      }
+    }
+    return copia;
+  }
+
+  
 
   public static void menu() {
     Scanner sc = new Scanner(System.in);
@@ -381,8 +403,6 @@ return false;
           String novaAresta = sc.nextLine();
           adicionaAresta(grafo, novaAresta);
 
- 
-
           break;
 
         }
@@ -391,27 +411,27 @@ return false;
           System.out.println("Digite a aresta que deseja remover - Exemplo: 1,2: ");
           String removerAresta = sc.nextLine();
           removeAresta(grafo, removerAresta);
- 
+
           break;
 
         }
         case 3: {
 
           printSucessores(grafo);
- 
+
           break;
 
         }
         case 4: {
 
           printPredecessores(grafo);
- 
+
           break;
 
         }
         case 5: {
           imprimeGrauVertice(grafo);
- 
+
           break;
 
         }
@@ -431,7 +451,6 @@ return false;
           // verificação se o grafo é bipartido
           grafoConexo(grafo, numVertices);
 
- 
           break;
 
         }
@@ -440,17 +459,18 @@ return false;
           System.out.println("Digite o vértice de início para a busca em largura:");
           int inicio = sc.nextInt();
           buscaLargura(grafo, inicio);
- 
+
           break;
         }
         case 8: {
           System.out.println("Digite o vértice de início para a busca em profundidade:");
           int inicio = sc.nextInt();
           buscaProfundidade(grafo, inicio);
- 
+
           break;
         }
         case 9: {
+          ArrayList<Vertices> copia = ponderador(grafo);
 
           break;
         }
