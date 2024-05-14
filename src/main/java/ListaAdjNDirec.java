@@ -225,51 +225,6 @@ private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boo
   }
 }
 
-
-public static void dfsTopologico(ArrayList<Vertices> grafo, int vertice, boolean[] visitei, boolean[] pilhaRec,
-        Stack<Integer> pilha) {
-    int indice = vertice - 1; // Obtém o índice real do vértice
-
-    if (pilhaRec[indice]) {
-        return; // Ignora vértices que já estão na pilha de recursão
-    }
-
-    if (visitei[indice]) {
-        return; // Ignora vértices já visitados
-    }
-
-    visitei[indice] = true;
-    pilhaRec[indice] = true;
-
-    for (int i = 0; i < grafo.get(indice).arestas.size(); i++) {
-        int vizinho = grafo.get(indice).arestas.get(i);
-        dfsTopologico(grafo, vizinho, visitei, pilhaRec, pilha);
-    }
-
-    pilhaRec[indice] = false;
-    pilha.push(vertice);
-}
-
-public static void ordenacaoTopologica(ArrayList<Vertices> grafo, int numVertices) {
-    Stack<Integer> pilha = new Stack<>();
-    boolean[] visitei = new boolean[numVertices];
-    boolean[] pilhaRec = new boolean[numVertices];
-
-    for (int i = 0; i < numVertices; i++) {
-        int vertice = i + 1; // Rótulo do vértice
-        dfsTopologico(grafo, vertice, visitei, pilhaRec, pilha);
-    }
-
-    System.out.println("Ordenação Topológica:");
-    while (!pilha.isEmpty()) {
-        System.out.print(pilha.pop());
-        if (!pilha.isEmpty()) {
-            System.out.print(" -> ");
-        }
-    }
-    System.out.println();
-}
-
 public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
   visitei[vertice] = true;
 
@@ -335,9 +290,9 @@ public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
       System.out.println("[ 2 ] - Remover Arestas");
       System.out.println("[ 3 ] - Vizinhança");
       System.out.println("[ 4 ] - Grau de cada Vértice");
-      System.out.println("[ 5 ] - Verificação do Grafo (Bipartido e Conexo)");
-      System.out.println("[ 6 ] - Busca em Largura**");
-      System.out.println("[ 7 ] - Busca em Profundidade**");
+      System.out.println("[ 5 ] - Verificação do Grafo (Bipartido e Simples)");
+      System.out.println("[ 6 ] - Busca em Largura");
+      System.out.println("[ 7 ] - Busca em Profundidade");
       System.out.println("[ 8 ] - Árvore Geradora Mínima**");
       System.out.println("[ 9 ] - Caminho mínimo entre dois vértices**");
       System.out.println("[ 0 ] - Sair");

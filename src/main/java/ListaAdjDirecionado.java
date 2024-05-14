@@ -288,31 +288,6 @@ pilha.push(vertice);
 return false;
 }
 
-public static void ordenacaoTopologica(ArrayList<Vertices> grafo, int numVertices) {
-Stack<Integer> pilha = new Stack<>();
-boolean[] visitei = new boolean[numVertices];
-boolean[] pilhaRec = new boolean[numVertices];
-
-for (int i = 0; i < numVertices; i++) {
-  int vertice = i + 1; // Rótulo do vértice
-  if (!visitei[i]) {
-      if (dfsTopologico(grafo, vertice, visitei, pilhaRec, pilha)) {
-          System.out.println("O grafo contém um ciclo!");
-          return;
-      }
-  }
-}
-
-System.out.println("Ordenação Topológica:");
-while (!pilha.isEmpty()) {
-  System.out.print(pilha.pop());
-  if (!pilha.isEmpty()) {
-      System.out.print(" -> ");
-  }
-}
-System.out.println();
-}
-
 
 
   public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
@@ -393,7 +368,7 @@ System.out.println();
       System.out.println("[ 6 ] - Verificação do Grafo (Bipartido)");
       System.out.println("[ 7 ] - Busca em Largura");
       System.out.println("[ 8 ] - Busca em Profundidade");
-      System.out.println("[ 9 ] - Ordenação Topológica**");
+      System.out.println("[ 9 ] - Árvore geradora mínima**");
       System.out.println("[ 10 ] - Caminho mínimo entre dois vértices**");
       System.out.println("[ 0 ] - Sair");
       System.out.println("Qual opção você deseja? ");
@@ -476,7 +451,7 @@ System.out.println();
           break;
         }
         case 9: {
-          ordenacaoTopologica(grafo, numVertices);
+
           break;
         }
 
