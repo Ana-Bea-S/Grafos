@@ -64,7 +64,7 @@ public class MatrizAjdDirec {
     for (int i = 0; i <  numVertice; i++) {
       System.out.print("Sucessores do vértice " + i + ": ");
       for (int j = 1; j <= numVertice; j++) {
-        if (grafo.matrizAdj[i][j] == -1) {
+        if (grafo.matrizAdj[i][j] == 1) {
           System.out.print(j + " ");
         }
       }
@@ -76,7 +76,7 @@ public class MatrizAjdDirec {
     for (int i = 0; i <  numVertice; i++) {
       System.out.print("Predecessores do vértice " + i + ": ");
       for (int j = 1; j <= numVertice; j++) {
-        if (grafo.matrizAdj[i][j] == 1) {
+        if (grafo.matrizAdj[i][j] == -1) {
           System.out.print(j + " ");
         }
       }
