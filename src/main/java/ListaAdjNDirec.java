@@ -164,6 +164,139 @@ public class ListaAdjNDirec {
 
   }
 
+  public static void buscaLargura(ArrayList<Vertices> grafo, int vertOrigem) {
+    boolean[] visitei = new boolean[grafo.size()];
+    Queue<Integer> busca = new LinkedList<>();
+
+    visitei[vertOrigem - 1] = true;
+    busca.add(vertOrigem - 1);
+
+    System.out.print("Árvore:\n ");
+    while (!busca.isEmpty()) {
+        int vertAtual = busca.poll();
+        System.out.print(vertAtual + 1);
+
+        boolean primVizinho = true;
+        for (Integer vizinho : grafo.get(vertAtual).arestas) {
+            if (!visitei[vizinho]) {
+                if (primVizinho) {
+                    primVizinho = false;
+                    System.out.print(" -> ");
+                } else {
+                    System.out.print(", ");
+                }
+                visitei[vizinho] = true;
+                busca.add(vizinho);
+                System.out.print(vizinho + 1);
+            }
+        }
+        System.out.println();
+    }
+    System.out.println();
+}
+
+
+public static void buscaProfundidade(ArrayList<Vertices> grafo, int vertOrigem) {
+  boolean[] visitei = new boolean[grafo.size()];
+  int numArvores = 0; // contador para o número de árvores/componentes
+
+  System.out.print("Árvore " + ++numArvores + ": ");
+  pesqProfundidade(grafo, vertOrigem - 1, visitei);
+  System.out.println();
+
+  for (int i = 0; i < grafo.size(); i++) {
+      if (!visitei[i]) {
+          System.out.print("Árvore " + ++numArvores + ": ");
+          pesqProfundidade(grafo, i, visitei);
+          System.out.println();
+      }
+  }
+}
+
+private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
+  visitei[vertice] = true;
+  System.out.print(vertice + 1 + " ");
+
+  for (Integer vizinho : grafo.get(vertice).arestas) {
+      if (!visitei[vizinho]) {
+          System.out.print(" -> ");
+          pesqProfundidade(grafo, vizinho, visitei);
+      }
+  }
+}
+
+
+public static void dfsTopologico(ArrayList<Vertices> grafo, int vertice, boolean[] visitei, boolean[] pilhaRec,
+        Stack<Integer> pilha) {
+    int indice = vertice - 1; // Obtém o índice real do vértice
+
+    if (pilhaRec[indice]) {
+        return; // Ignora vértices que já estão na pilha de recursão
+    }
+
+    if (visitei[indice]) {
+        return; // Ignora vértices já visitados
+    }
+
+    visitei[indice] = true;
+    pilhaRec[indice] = true;
+
+    for (int i = 0; i < grafo.get(indice).arestas.size(); i++) {
+        int vizinho = grafo.get(indice).arestas.get(i);
+        dfsTopologico(grafo, vizinho, visitei, pilhaRec, pilha);
+    }
+
+    pilhaRec[indice] = false;
+    pilha.push(vertice);
+}
+
+public static void ordenacaoTopologica(ArrayList<Vertices> grafo, int numVertices) {
+    Stack<Integer> pilha = new Stack<>();
+    boolean[] visitei = new boolean[numVertices];
+    boolean[] pilhaRec = new boolean[numVertices];
+
+    for (int i = 0; i < numVertices; i++) {
+        int vertice = i + 1; // Rótulo do vértice
+        dfsTopologico(grafo, vertice, visitei, pilhaRec, pilha);
+    }
+
+    System.out.println("Ordenação Topológica:");
+    while (!pilha.isEmpty()) {
+        System.out.print(pilha.pop());
+        if (!pilha.isEmpty()) {
+            System.out.print(" -> ");
+        }
+    }
+    System.out.println();
+}
+
+public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
+  visitei[vertice] = true;
+
+  for (Integer vizinho : grafo.get(vertice).arestas) {
+      if (!visitei[vizinho]) {
+          dfsConexo(grafo, vizinho, visitei);
+      }
+  }
+}
+
+public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
+  boolean[] visitado = new boolean[numVertices];
+
+  // Realiza a busca em profundidade a partir do primeiro vértice
+  dfsConexo(grafo, 0, visitado);
+
+  // Verifica se todos os vértices foram alcançados
+  for (int i = 0; i < numVertices; i++) {
+      if (!visitado[i]) {
+          System.out.println("O grafo não é conexo.");
+          return;
+      }
+  }
+  System.out.println("O grafo é conexo.");
+}
+
+
   public static void menu() {
     Scanner sc = new Scanner(System.in);
 
@@ -202,51 +335,55 @@ public class ListaAdjNDirec {
       System.out.println("[ 2 ] - Remover Arestas");
       System.out.println("[ 3 ] - Vizinhança");
       System.out.println("[ 4 ] - Grau de cada Vértice");
-      System.out.println("[ 5 ] - Verificação do Grafo");
+      System.out.println("[ 5 ] - Verificação do Grafo (Bipartido e Conexo)");
+      System.out.println("[ 6 ] - Busca em Largura**");
+      System.out.println("[ 7 ] - Busca em Profundidade**");
+      System.out.println("[ 8 ] - Árvore Geradora Mínima**");
+      System.out.println("[ 9 ] - Caminho mínimo entre dois vértices**");
       System.out.println("[ 0 ] - Sair");
       System.out.println("Qual opção você deseja? ");
       op = sc.nextInt();
 
       switch (op) {
         case 1: {
-          System.out.println("\n\n");
+            
 
           sc.nextLine();
           System.out.println("Digite a aresta que deseja adicionar - Exemplo: 1,2: ");
           String novaAresta = sc.nextLine();
           adicionaAresta(grafo, novaAresta);
 
-          System.out.println("\n\n\n\n");
+            
 
           break;
 
         }
         case 2: {
-          System.out.println("\n\n");
+            
 
           sc.nextLine();
           System.out.println("Digite a aresta que deseja remover - Exemplo: 1,2: ");
           String removerAresta = sc.nextLine();
           removeAresta(grafo, removerAresta);
-          System.out.println("\n\n\n\n");
+            
           break;
 
         }
         case 3: {
 
           imprimeVizinhos(grafo);
-          System.out.println("\n\n\n\n");
+            
           break;
 
         }
         case 4: {
           imprimeGrauVertice(grafo);
-          System.out.println("\n\n\n\n");
+            
           break;
 
         }
         case 5: {
-          System.out.println("\n\n");
+            
           // verificação se o grafo é simples
           grafoSimples(grafo);
           System.out.println("\n");
@@ -260,9 +397,26 @@ public class ListaAdjNDirec {
           System.out.println("\n");
           // verificação se o grafo é bipartido
 
-          System.out.println("\n\n\n\n");
+          grafoConexo(grafo, numVertices);
+
+            
           break;
 
+        }
+        case 6: {
+            
+          System.out.println("Digite o vértice de início para a busca em largura:");
+          int inicio = sc.nextInt();
+          buscaLargura(grafo, inicio);
+ 
+          break;
+        }
+        case 7: {
+          System.out.println("Digite o vértice de início para a busca em profundidade:");
+          int inicio = sc.nextInt();
+          buscaProfundidade(grafo, inicio);
+ 
+          break;
         }
         case 0: {
 
@@ -273,14 +427,14 @@ public class ListaAdjNDirec {
         default: {
 
           System.out.println("Opção inválida, tente novamente");
-          System.out.println("\n\n");
+            
           break;
 
         }
       }
 
     } while (op != 0);
-    sc.close();
+
   }
 
 }
