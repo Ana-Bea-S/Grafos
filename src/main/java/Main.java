@@ -49,7 +49,7 @@ public class Main {
 
           switch(opp){
             case "1":{
-              //ListaAdjDirecionado.menu();
+              ListaAdjDirecionado.menu();
               break;
             }
             case "2":{

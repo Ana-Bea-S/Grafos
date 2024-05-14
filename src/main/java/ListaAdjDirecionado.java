@@ -260,6 +260,61 @@ public class ListaAdjDirecionado {
     }
   }
 
+  public static boolean dfsTopologico(ArrayList<Vertices> grafo, int vertice, boolean[] visitei, boolean[] pilhaRec,
+  Stack<Integer> pilha) {
+int indice = vertice - 1; // Obtém o índice real do vértice
+
+if (pilhaRec[indice]) {
+  return true; // Ciclo encontrado
+}
+
+if (visitei[indice]) {
+  return false; // Já foi visitado e não forma ciclo
+}
+
+visitei[indice] = true;
+pilhaRec[indice] = true;
+
+for (int i = 0; i < grafo.get(indice).arestas.size(); i++) {
+  int vizinho = grafo.get(indice).arestas.get(i);
+  if (dfsTopologico(grafo, vizinho, visitei, pilhaRec, pilha)) {
+      return true; // Ciclo encontrado
+  }
+}
+
+pilhaRec[indice] = false;
+pilha.push(vertice);
+
+return false;
+}
+
+public static void ordenacaoTopologica(ArrayList<Vertices> grafo, int numVertices) {
+Stack<Integer> pilha = new Stack<>();
+boolean[] visitei = new boolean[numVertices];
+boolean[] pilhaRec = new boolean[numVertices];
+
+for (int i = 0; i < numVertices; i++) {
+  int vertice = i + 1; // Rótulo do vértice
+  if (!visitei[i]) {
+      if (dfsTopologico(grafo, vertice, visitei, pilhaRec, pilha)) {
+          System.out.println("O grafo contém um ciclo!");
+          return;
+      }
+  }
+}
+
+System.out.println("Ordenação Topológica:");
+while (!pilha.isEmpty()) {
+  System.out.print(pilha.pop());
+  if (!pilha.isEmpty()) {
+      System.out.print(" -> ");
+  }
+}
+System.out.println();
+}
+
+
+
   public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
     visitei[vertice] = true;
 
@@ -351,7 +406,7 @@ public class ListaAdjDirecionado {
           String novaAresta = sc.nextLine();
           adicionaAresta(grafo, novaAresta);
 
-          System.out.println("\n\n\n\n");
+ 
 
           break;
 
@@ -361,27 +416,27 @@ public class ListaAdjDirecionado {
           System.out.println("Digite a aresta que deseja remover - Exemplo: 1,2: ");
           String removerAresta = sc.nextLine();
           removeAresta(grafo, removerAresta);
-          System.out.println("\n\n\n\n");
+ 
           break;
 
         }
         case 3: {
 
           printSucessores(grafo);
-          System.out.println("\n\n\n\n");
+ 
           break;
 
         }
         case 4: {
 
           printPredecessores(grafo);
-          System.out.println("\n\n\n\n");
+ 
           break;
 
         }
         case 5: {
           imprimeGrauVertice(grafo);
-          System.out.println("\n\n\n\n");
+ 
           break;
 
         }
@@ -401,7 +456,7 @@ public class ListaAdjDirecionado {
           // verificação se o grafo é bipartido
           grafoConexo(grafo, numVertices);
 
-          System.out.println("\n\n\n\n");
+ 
           break;
 
         }
@@ -410,14 +465,18 @@ public class ListaAdjDirecionado {
           System.out.println("Digite o vértice de início para a busca em largura:");
           int inicio = sc.nextInt();
           buscaLargura(grafo, inicio);
-          System.out.println("\n\n\n\n");
+ 
           break;
         }
         case 8: {
           System.out.println("Digite o vértice de início para a busca em profundidade:");
           int inicio = sc.nextInt();
           buscaProfundidade(grafo, inicio);
-          System.out.println("\n\n\n\n");
+ 
+          break;
+        }
+        case 9: {
+          ordenacaoTopologica(grafo, numVertices);
           break;
         }
 
@@ -437,7 +496,6 @@ public class ListaAdjDirecionado {
       }
 
     } while (op != 0);
-    sc.close();
   }
 
 }

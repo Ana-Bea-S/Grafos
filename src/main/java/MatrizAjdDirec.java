@@ -56,7 +56,7 @@ public class MatrizAjdDirec {
       for (int j = 0; j < numVertice; j++) {
         grau += Math.abs(grafo.matrizAdj[i][j]);
       }
-      System.out.println("Grau do vértice " + ++i + ": " + grau);
+      System.out.println("Grau do vértice " + (i+1) + ": " + grau);
     }
   }
 
@@ -65,7 +65,7 @@ public class MatrizAjdDirec {
       System.out.print("Sucessores do vértice " + (i+1) + ": ");
       for (int j = 0; j < numVertice; j++) {
         if (grafo.matrizAdj[i][j] == 1) {
-          System.out.print(j+1 + " ");
+          System.out.print((j+1) + " ");
         }
       }
       System.out.println();
@@ -77,7 +77,7 @@ public class MatrizAjdDirec {
       System.out.print("Predecessores do vértice " + (i+1) + ": ");
       for (int j = 0; j < numVertice; j++) {
         if (grafo.matrizAdj[i][j] == -1) {
-          System.out.print(j+1 + " ");
+          System.out.print((j+1) + " ");
         }
       }
       System.out.println();
@@ -317,11 +317,11 @@ public class MatrizAjdDirec {
   }
 
   public static void grafoConexo(Grafo grafo, int numVertices) {
-    boolean[] visitado = new boolean[numVertices + 1];
+    boolean[] visitado = new boolean[numVertices];
     boolean conexo = true;
 
     // Realiza a busca em profundidade a partir do primeiro vértice
-    dfsConexo(grafo, 1, visitado);
+    dfsConexo(grafo, 0, visitado);
 
     // Verifica se todos os vértices foram alcançados
     for (int i = 0; i <  numVertices; i++) {
@@ -339,32 +339,29 @@ public class MatrizAjdDirec {
   }
 
   public static void dijkstra(Grafo grafo, int origem, int destino, int numVertices) {
-    int[] distancias = new int[numVertices + 1];
-    Arrays.fill(distancias, Integer.MAX_VALUE);
-    distancias[origem] = 0;
+    int[] distancia = new int[numVertices];
+    boolean[] visitado = new boolean[numVertices];
 
-    PriorityQueue<Integer> fila = new PriorityQueue<>(Comparator.comparingInt(v -> distancias[v]));
-    fila.add(origem);
+    Arrays.fill(distancia, Integer.MAX_VALUE);
+    distancia[origem] = 0;
 
-    while (!fila.isEmpty()) {
-      int u = fila.poll();
+    PriorityQueue<Integer> filaPrioridade = new PriorityQueue<>(numVertices, Comparator.comparingInt(o -> distancia[o]));
+    filaPrioridade.add(origem);
+
+    while (!filaPrioridade.isEmpty()) {
+      int u = filaPrioridade.poll();
+      visitado[u] = true;
 
       for (int v = 0; v < numVertices; v++) {
-        if (grafo.matrizAdj[u][v] == -1) {
-          int peso = grafo.matrizAdj[u][v]; 
-          if (distancias[v] > distancias[u] + peso) {
-            distancias[v] = distancias[u] + peso;
-            fila.add(v);
-          }
+        if (grafo.matrizAdj[u][v] == -1 && !visitado[v] && distancia[u] != Integer.MAX_VALUE &&
+            distancia[u] + grafo.matrizAdj[u][v] < distancia[v]) {
+          distancia[v] = distancia[u] + grafo.matrizAdj[u][v];
+          filaPrioridade.add(v);
         }
       }
     }
 
-    if (distancias[destino] == Integer.MAX_VALUE) {
-      System.out.println("Não há caminho de " + ++origem + " para " + ++destino);
-    } else {
-      System.out.println("Distância mínima de " + ++origem + " para " + ++destino + ": " + distancias[destino]);
-    }
+    System.out.println("Distância mínima de " + origem + " para " + destino + ": " + distancia[destino]);
   }
 
   public static Grafo ponderador(Grafo g) {
@@ -508,7 +505,7 @@ public class MatrizAjdDirec {
             int vertOrigem = Integer.parseInt(sc.nextLine());
 
             System.out.print("Busca em Largura:  ");
-            buscaLargura(grafo, vertOrigem, numVertice);
+            buscaLargura(grafo, vertOrigem-1, numVertice);
              
             break;
           }
@@ -518,7 +515,7 @@ public class MatrizAjdDirec {
             int vertOrigem = Integer.parseInt(sc.nextLine());
 
             System.out.print("Busca em Profundidade:  ");
-            buscaProfundidade(grafo, vertOrigem, numVertice);
+            buscaProfundidade(grafo, vertOrigem-1, numVertice);
              
             break;
           }
@@ -537,7 +534,7 @@ public class MatrizAjdDirec {
             System.out.println("Digite o vértice de destino para o algoritmo de Dijkstra: ");
             int vertDestino = Integer.parseInt(sc.nextLine());
 
-            dijkstra(copia, vertOrigem, vertDestino, numVertice);
+            dijkstra(copia, vertOrigem-1, vertDestino-1, numVertice);
 
             break;
           }
