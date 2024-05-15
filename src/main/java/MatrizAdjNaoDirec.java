@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -148,6 +149,43 @@ public class MatrizAdjNaoDirec {
     }
   }
 
+  public static void grafoConexo(Grafo2 grafo, int numVertices) {
+    boolean[] visitados = new boolean[numVertices];
+    Queue<Integer> fila = new LinkedList<>();
+    int verticeInicial = 0; // Você pode escolher qualquer vértice inicial para iniciar a busca
+
+    // Marca o vértice inicial como visitado e o adiciona à fila
+    visitados[verticeInicial] = true;
+    fila.add(verticeInicial);
+
+    // Enquanto a fila não estiver vazia, continua a busca
+    while (!fila.isEmpty()) {
+        int verticeAtual = fila.poll();
+
+        // Para cada vértice adjacente ao vértice atual
+        for (int i = 0; i < numVertices; i++) {
+            // Se houver uma aresta entre o vértice atual e o vértice i e i não foi visitado ainda
+            if (grafo.matrizAdj[verticeAtual][i] != 0 && !visitados[i]) {
+                // Marca o vértice i como visitado e o adiciona à fila
+                visitados[i] = true;
+                fila.add(i);
+            }
+        }
+    }
+
+    // Verifica se todos os vértices foram visitados
+    for (boolean visitado : visitados) {
+        if (!visitado) {
+            // Se algum vértice não foi visitado, o grafo não é conexo
+            System.out.println("O grafo não é conexo.");
+            return;
+        }
+    }
+
+    // Se todos os vértices foram visitados, o grafo é conexo
+    System.out.println("O grafo é conexo.");
+}
+
   public static void buscaEmLargura(Grafo2 grafo, int verticeInicial, int numVertices) {
     boolean visitados[] = new boolean[numVertices];
     Queue<Integer> fila = new LinkedList<>();
@@ -184,6 +222,116 @@ public class MatrizAdjNaoDirec {
     boolean visitados[] = new boolean[numVertices];
     buscaEmProfundidade(grafo, verticeInicial, visitados);
     System.out.println();
+  }
+
+    public static void dijkstra(Grafo2 grafo, int origem, int destino, int numVertices) {
+        // Array para armazenar a menor distância de origem até cada vértice
+        int[] distancia = new int[numVertices];
+        // Array para registrar se o vértice correspondente já foi visitado
+        boolean[] visitado = new boolean[numVertices];
+
+        // Inicializa todas as distâncias como infinito e todos os vértices como não visitados
+        Arrays.fill(distancia, Integer.MAX_VALUE);
+        Arrays.fill(visitado, false);
+
+        // A distância da origem até ela mesma é 0
+        distancia[origem] = 0;
+
+        // Encontra o caminho mais curto para todos os vértices
+        for (int count = 0; count < numVertices - 1; count++) {
+            // Encontra o vértice com a menor distância do conjunto de vértices ainda não visitados
+            int u = minDistance(distancia, visitado, numVertices);
+            // Marca o vértice como visitado
+            visitado[u] = true;
+            // Se o vértice de destino for alcançado, podemos parar a busca
+            if (u == destino) {
+                break;
+            }
+            // Atualiza a distância de todos os vértices adjacentes ao vértice atual
+            for (int v = 0; v < numVertices; v++) {
+                // Atualiza a distância se:
+                // 1. Houver uma aresta de u para v
+                // 2. v ainda não foi visitado
+                // 3. A distância total até v passando por u é menor do que a distância atualmente armazenada para v
+                if (grafo.matrizAdj[u][v] != 0 && !visitado[v] && distancia[u] != Integer.MAX_VALUE &&
+                        distancia[u] + grafo.matrizAdj[u][v] < distancia[v]) {
+                    distancia[v] = distancia[u] + grafo.matrizAdj[u][v];
+                }
+            }
+        }
+
+        // Imprime a distância mínima até o vértice de destino
+        System.out.println("Distância mínima de " + (origem+1) + " para " + (destino+1) + ": " + distancia[destino]);
+    }
+
+    // Função auxiliar para encontrar o vértice com a menor distância do conjunto de vértices ainda não visitados
+    private static int minDistance(int[] distancia, boolean[] visitado, int numVertices) {
+        int min = Integer.MAX_VALUE;
+        int minIndex = -1;
+        for (int v = 0; v < numVertices; v++) {
+            if (!visitado[v] && distancia[v] <= min) {
+                min = distancia[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
+    }
+
+    public static void primMST(Grafo2 grafo, int numVertices) {
+      // Array para armazenar a chave de cada vértice
+      int[] chave = new int[numVertices];
+      // Array para armazenar o vértice pai de cada vértice na árvore geradora mínima
+      int[] pai = new int[numVertices];
+      // Array para registrar se o vértice correspondente já foi incluído na árvore geradora mínima
+      boolean[] incluido = new boolean[numVertices];
+
+      // Inicializa todas as chaves como infinito e todos os vértices como não incluídos na árvore
+      Arrays.fill(chave, Integer.MAX_VALUE);
+      Arrays.fill(incluido, false);
+
+      // Ajusta o primeiro vértice para começar do 0
+      int u = 0;
+
+      // Constrói a árvore geradora mínima com base na chave de cada vértice
+      for (int count = 0; count < numVertices - 1; count++) {
+          // Marca o vértice como incluído na árvore
+          incluido[u] = true;
+          // Atualiza a chave de cada vértice adjacente ao vértice atual
+          for (int v = 0; v < numVertices; v++) {
+              // Ajusta os índices dos vértices para começar do 0
+              int verticeU = u + 1;
+              int verticeV = v + 1;
+              // Atualiza a chave se:
+              // 1. Houver uma aresta de u para v
+              // 2. v ainda não foi incluído na árvore
+              // 3. O peso da aresta entre u e v for menor do que a chave atual de v
+              if (grafo.matrizAdj[u][v] != 0 && !incluido[v] && grafo.matrizAdj[u][v] < chave[v]) {
+                  pai[v] = u;
+                  chave[v] = grafo.matrizAdj[u][v];
+              }
+          }
+          // Encontra o vértice com a chave mínima que ainda não foi incluído na árvore
+          u = minKey(chave, incluido, numVertices);
+      }
+
+      // Imprime as arestas da árvore geradora mínima
+      System.out.println("Arestas da Árvore Geradora Mínima:");
+      for (int i = 1; i < numVertices; i++) {
+          System.out.println("Aresta " + (pai[i] + 1) + " - " + (i + 1) + " -> Peso: " + grafo.matrizAdj[i][pai[i]]);
+      }
+  }
+
+  // Função auxiliar para encontrar o vértice com a chave mínima que ainda não foi incluído na árvore
+  private static int minKey(int[] chave, boolean[] incluido, int numVertices) {
+      int min = Integer.MAX_VALUE;
+      int minIndex = -1;
+      for (int v = 0; v < numVertices; v++) {
+          if (!incluido[v] && chave[v] < min) {
+              min = chave[v];
+              minIndex = v;
+          }
+      }
+      return minIndex;
   }
 
   public static void menu() {
@@ -294,6 +442,9 @@ public class MatrizAdjNaoDirec {
             System.out.println("\n");
             // verificação se o grafo é bipartido
 
+            //verifica se o grafo é conexo
+            grafoConexo(grafo, numVertice);
+
             System.out.println("\n\n\n\n");
             break;
 
@@ -317,6 +468,23 @@ public class MatrizAdjNaoDirec {
             System.out.println("\n\n\n\n");
             break;
           }
+          case 9: {
+            System.out.println("\n\n");
+            primMST(grafo, numVertice);
+            System.out.println("\n\n\n\n");
+            break;
+        }
+        
+          case 10: {
+            System.out.println("\n\n");
+            System.out.println("Digite o vértice de origem para o algoritmo de Dijkstra: ");
+            int origemDijkstra = sc.nextInt();
+            System.out.println("Digite o vértice de destino para o algoritmo de Dijkstra: ");
+            int destinoDijkstra = sc.nextInt();
+            dijkstra(grafo, origemDijkstra -1 , destinoDijkstra -1, numVertice);
+            System.out.println("\n\n\n\n");
+            break;
+        }
           case 0: {
             System.out.println("Até logo!");
             break;
