@@ -328,16 +328,21 @@ public class ListaAdjDirecionado {
     Scanner sc = new Scanner(System.in);
 
 
-    ArrayList<Vertices> copia = new ArrayList<>(grafo.size());
+    ArrayList<Vertices> copia = new ArrayList<Vertices>(grafo.size());
+
+    System.out.println(copia);
 
 
     for (Vertices vertice : grafo) {
+      System.out.println(copia);
       copia.add(new Vertices(vertice.rotulo));
     }
 
     for (int i = 0; i < copia.size(); i++) {
       Vertices vertice = copia.get(i);
+      System.out.println("bbb");
       for (Integer vizinho : vertice.arestas) {
+        System.out.println("aaaaa");
         System.out.println("Adicione o peso para " + (vertice.rotulo) + "," + (vizinho + 1) + ":");
         String peso = sc.nextLine();
         copia.get(i).arestas.add(Integer.parseInt(peso));
