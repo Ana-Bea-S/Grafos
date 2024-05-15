@@ -2,91 +2,51 @@ import java.util.*;
 
 public class ListaAdjNDirec {
   public static void adicionaAresta(ArrayList<Vertices> grafo, String aresta) {
-
     String[] aux = aresta.split(",");
     int origem = Integer.parseInt(aux[0]) - 1;
     int destino = Integer.parseInt(aux[1]) - 1;
+    int peso = Integer.parseInt(aux[2]);
 
-    grafo.get(origem).arestas.add(destino);
-    grafo.get(destino).arestas.add(origem);
+    grafo.get(origem).arestas.add(new Arestas(destino, peso));
+}
 
-  }
-
-  public static void removeAresta(ArrayList<Vertices> grafo, String aresta) {
+public static void removeAresta(ArrayList<Vertices> grafo, String aresta) {
     String[] aux = aresta.split(",");
     int origem = Integer.parseInt(aux[0]) - 1;
     int destino = Integer.parseInt(aux[1]) - 1;
-    ArrayList<Integer> verticeO = grafo.get(origem).arestas;
-    ArrayList<Integer> verticeD = grafo.get(destino).arestas;
+    ArrayList<Arestas> verticeO = grafo.get(origem).arestas;
 
     for (int i = 0; i < verticeO.size(); i++) {
-      if (verticeO.get(i) == destino) {
-        grafo.get(origem).arestas.remove(i);
-      }
-    }
-    if (grafo.get(origem).arestas.size() == 0) {
-      boolean flag = true;
-      for (int i = 0; i < grafo.size(); i++) {
-        ArrayList<Integer> arestas = grafo.get(i).arestas;
-        for (int j = 0; j < arestas.size(); j++) {
-          if (origem + 1 == arestas.get(j)) {
-            flag = false;
+        if (verticeO.get(i).destino == destino) {
+            verticeO.remove(i);
             break;
-          }
         }
-      }
-      if (flag) {
-        grafo.remove(origem);
-      }
     }
+}
 
-    for (int i = 0; i < verticeD.size(); i++) {
-      if (verticeD.get(i) == origem) {
-        grafo.get(destino).arestas.remove(i);
-      }
-    }
-    if (grafo.get(destino).arestas.size() == 0) {
-      boolean flag = true;
-      for (int i = 0; i < grafo.size(); i++) {
-        ArrayList<Integer> arestas = grafo.get(i).arestas;
-        for (int j = 0; j < arestas.size(); j++) {
-          if (origem + 1 == arestas.get(j)) {
-            flag = false;
-            break;
-          }
-        }
-      }
-      if (flag) {
-        grafo.remove(destino);
-      }
-    }
-  }
-
-  public static void imprimeVizinhos(ArrayList<Vertices> grafo) {
+public static void imprimeVizinhos(ArrayList<Vertices> grafo) {
     System.out.println("\nVizinhos:");
     for (int i = 0; i < grafo.size(); i++) {
-      Vertices vertice = grafo.get(i);
-      System.out.print("Vértice " + vertice.rotulo + ": [");
-      for (int j = 0; j < vertice.arestas.size(); j++) {
-        // encontra o vértice adjacente à aresta atual
-        int verticeAdj = vertice.arestas.get(j);
+        Vertices vertice = grafo.get(i);
+        System.out.print("Vértice " + vertice.rotulo + ": [");
+        for (int j = 0; j < vertice.arestas.size(); j++) {
+            Arestas aresta = vertice.arestas.get(j);
 
-        System.out.print(verticeAdj + 1);
-        // aqui ta verificando se tem mais vizinhos
-        if (j < vertice.arestas.size() - 1) {
-          System.out.print(", ");
+            System.out.print(aresta.destino + 1 + "(" + aresta.peso + ")");
+            if (j < vertice.arestas.size() - 1) {
+                System.out.print(", ");
+            }
         }
-      }
-      System.out.println("]");
+        System.out.println("]");
     }
-  }
+}
 
-  public static void imprimeGrauVertice(ArrayList<Vertices> grafo) {
+public static void imprimeGrauVertice(ArrayList<Vertices> grafo) {
     for (int i = 0; i < grafo.size(); i++) {
-      int grau = grafo.get(i).arestas.size();
-      System.out.println("O grau do vértice " + (i + 1) + " é: " + grau);
+        int grau = grafo.get(i).arestas.size();
+        System.out.println("O grau do vértice " + (i + 1) + " é: " + grau);
     }
-  }
+}
 
   // GRAFO SIMPLES COM ERRO E BIPARTIDO
   public static void grafoSimples(ArrayList<Vertices> grafo) {
@@ -270,15 +230,17 @@ public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
     // aqui está adicionando as arestas no grafo
     for (int i = 0; i < numArestas; i++) {
       sc.nextLine(); // Consumir quebra de linha
-      System.out.println("Digite as arestas, formato - 1,2: ");
+      System.out.println("Digite as arestas, formato - 1,2,3: ");
       String combinacao = sc.next();
 
       String[] aux = combinacao.split(",");
       int origem = Integer.parseInt(aux[0]) - 1;
       int destino = Integer.parseInt(aux[1]) - 1;
+      int peso = Integer.parseInt(aux[2]);
 
       grafo.get(origem).arestas.add(destino);
       grafo.get(destino).arestas.add(origem);
+      grafo.get(peso).arestas.add(peso);
 
       grafo.get(origem).rotulo = origem + 1;
     }

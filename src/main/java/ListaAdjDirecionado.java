@@ -301,92 +301,34 @@ public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
     }
 }
 
-public static void prim(ArrayList<Vertices> grafo) {
-  int numVertices = grafo.size();
-  boolean[] visitado = new boolean[numVertices];
-  int[] custoMinimo = new int[numVertices];
-  int[] pai = new int[numVertices];
-
-  for (int i = 0; i < numVertices; i++) {
-      custoMinimo[i] = Integer.MAX_VALUE;
-  }
-
-  custoMinimo[0] = 0;
-  pai[0] = -1;
-
-  for (int i = 0; i < numVertices - 1; i++) {
-      int u = minimoCusto(grafo, custoMinimo, visitado);
-
-      visitado[u] = true;
-
-      for (Arestas aresta : grafo.get(u).arestas) {
-          int v = aresta.destino;
-          int peso = aresta.peso;
-          if (!visitado[v] && peso < custoMinimo[v]) {
-              pai[v] = u;
-              custoMinimo[v] = peso; 
-          }
-      }
-  }
-
-  System.out.println("Árvore geradora mínima (Prim):");
-  for (int i = 1; i < numVertices; i++) {
-      System.out.println("Aresta: " + (pai[i]+1) + " - " + (i+1) + ", Peso: " + custoMinimo[i]);
-  }
-}
-
-private static int minimoCusto(ArrayList<Vertices> grafo, int[] custoMinimo, boolean[] visitado) {
-  int minimo = Integer.MAX_VALUE;
-  int minimoIndice = -1;
-
-  for (int v = 0; v < grafo.size(); v++) {
-      if (!visitado[v] && custoMinimo[v] < minimo) {
-          minimo = custoMinimo[v];
-          minimoIndice = v;
-      }
-  }
-
-  return minimoIndice;
-}
-
-
-public static void dijkstra(ArrayList<Vertices> grafo, int origem) {
+public static void dijkstra(ArrayList<Vertices> grafo, int origem, int destino) {
   int numVertices = grafo.size();
   boolean[] visitado = new boolean[numVertices];
   int[] distancia = new int[numVertices];
-
   for (int i = 0; i < numVertices; i++) {
       distancia[i] = Integer.MAX_VALUE;
   }
-
   distancia[origem] = 0;
-
   for (int i = 0; i < numVertices; i++) {
       int u = minimaDistancia(distancia, visitado);
 
       visitado[u] = true;
 
       for (Arestas aresta : grafo.get(u).arestas) {
-          int v = aresta.destino;
+          int v = aresta.destino -1;
           int peso = aresta.peso;
           if (!visitado[v]) {
-            if (distancia[u] != Integer.MAX_VALUE && distancia[u] + peso < distancia[v]) {
-                distancia[v] = distancia[u] + peso;
-            }
-        }
+              if (distancia[u] != Integer.MAX_VALUE && distancia[u] + peso < distancia[v]) {
+                  distancia[v] = distancia[u] + peso;
+              }
+          }
       }
   }
-
-  System.out.println("Caminhos mínimos (Dijkstra) a partir do vértice " + origem + ":");
-  for (int i = 0; i < numVertices; i++) {
-      System.out.println("Vértice " + (origem+1) + " -> Vértice " + (i+1) + ": " + distancia[i]);
-  }
+  System.out.println("Caminho mínimo entre o vértice " + (origem + 1) + " e o vértice " + (destino + 1) + ": " + distancia[destino]);
 }
-
 private static int minimaDistancia(int[] distancia, boolean[] visitado) {
   int minimo = Integer.MAX_VALUE;
   int minimoIndice = -1;
-
   for (int v = 0; v < distancia.length; v++) {
       if (!visitado[v] && distancia[v] < minimo) {
           minimo = distancia[v];
@@ -498,15 +440,18 @@ private static int minimaDistancia(int[] distancia, boolean[] visitado) {
           break;
         }
         case 9: {
-          prim(grafo);
+
           break;
       }
       case 10: {
-          System.out.println("Digite o vértice de origem para encontrar o caminho mínimo:");
-          int origem10 = Integer.parseInt(sc.nextLine());
-          dijkstra(grafo, origem10);
-          break;
-      }
+        System.out.println("Digite o vértice de origem para encontrar o caminho mínimo:");
+        int origemDij = Integer.parseInt(sc.nextLine());
+        System.out.println("Digite o vértice final para o caminho mínimo:");
+        int destinoDij = Integer.parseInt(sc.nextLine());
+        dijkstra(grafo, origemDij -1, destinoDij -1);
+        break;
+    }
+    
       
         case 0: {
           System.out.println("Até logo!");
