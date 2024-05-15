@@ -107,10 +107,10 @@ public class MatrizAdjNaoDirec {
     boolean regular = true;
     int grau = 0;
     for (int j = 0; j < numVertice; j++) {
-      grau += grafo.matrizAdj[1][j];
+      grau += grafo.matrizAdj[0][j]; // Corrigido para matrizAdj[0][j]
     }
 
-    for (int i = 2; i <= numVertice; i++) {
+    for (int i = 1; i < numVertice; i++) { // Iniciando de 1 pois o índice 0 já foi verificado
       int grauAtual = 0;
       for (int j = 0; j < numVertice; j++) {
         grauAtual += grafo.matrizAdj[i][j];
@@ -126,7 +126,8 @@ public class MatrizAdjNaoDirec {
     } else {
       System.out.println("O grafo não é regular.");
     }
-  }
+}
+
 
   public static void grafoCompleto(Grafo2 grafo, int numVertice) {
     boolean completo = true;
@@ -148,6 +149,49 @@ public class MatrizAdjNaoDirec {
       System.out.println("O grafo não é completo.");
     }
   }
+
+  public static void grafoBipartido(Grafo2 grafo, int numVertices) {
+    // Array para registrar a cor de cada vértice
+    // Usaremos 0 para vértices ainda não coloridos, 1 para uma cor e -1 para a outra cor
+    int[] cor = new int[numVertices];
+    // Inicializa todas as cores como não atribuídas (0)
+    for (int i = 0; i < numVertices; i++) {
+        cor[i] = 0;
+    }
+
+    // Vamos usar uma busca em largura (BFS) para atribuir cores aos vértices
+    // Começamos com um vértice arbitrário (0) e o marcamos com a cor 1
+    cor[0] = 1;
+    // Criamos uma fila para realizar a busca em largura
+    Queue<Integer> fila = new LinkedList<>();
+    fila.add(0);
+
+    // Realizamos a busca em largura
+    while (!fila.isEmpty()) {
+        int u = fila.poll();
+        // Para cada vértice adjacente a u
+        for (int v = 0; v < numVertices; v++) {
+            // Ajustando para começar a contar a partir de 1
+            int verticeU = u + 1;
+            int verticeV = v + 1;
+            // Se existe uma aresta de u para v e v ainda não foi colorido
+            if (grafo.matrizAdj[u][v] != 0 && cor[v] == 0) {
+                // Atribuímos a cor oposta a u a v
+                cor[v] = -cor[u];
+                fila.add(v);
+            }
+            // Se existe uma aresta de u para v e v já foi colorido com a mesma cor que u
+            else if (grafo.matrizAdj[u][v] != 0 && cor[v] == cor[u]) {
+                // Imprime que o grafo não é bipartido
+                System.out.println("O grafo não é bipartido.");
+                return;
+            }
+        }
+    }
+
+    // Se chegamos aqui, o grafo é bipartido
+    System.out.println("O grafo é bipartido.");
+}
 
   public static void grafoConexo(Grafo2 grafo, int numVertices) {
     boolean[] visitados = new boolean[numVertices];
@@ -299,8 +343,8 @@ public class MatrizAdjNaoDirec {
           // Atualiza a chave de cada vértice adjacente ao vértice atual
           for (int v = 0; v < numVertices; v++) {
               // Ajusta os índices dos vértices para começar do 0
-              int verticeU = u + 1;
-              int verticeV = v + 1;
+              int verticeU = u - 1;
+              int verticeV = v - 1;
               // Atualiza a chave se:
               // 1. Houver uma aresta de u para v
               // 2. v ainda não foi incluído na árvore
@@ -441,7 +485,8 @@ public class MatrizAdjNaoDirec {
             grafoCompleto(grafo, numVertice);
             System.out.println("\n");
             // verificação se o grafo é bipartido
-
+            grafoBipartido(grafo, numVertice);
+            System.out.println("\n");
             //verifica se o grafo é conexo
             grafoConexo(grafo, numVertice);
 
@@ -499,7 +544,7 @@ public class MatrizAdjNaoDirec {
       } while (op != 0);
 
     } catch (Exception E) {
-      System.out.println("Erro!");
+      System.out.println(E.getMessage());
     }
 
   }
