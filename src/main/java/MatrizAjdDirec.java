@@ -176,7 +176,7 @@ public class MatrizAjdDirec {
           int u = fila.poll(); // Remove o vértice da fila
 
           // Percorre todos os vértices adjacentes de u
-          for (int v = 1; v <= numVertice; v++) {
+          for (int v = 0; v < numVertice; v++) {
             // Se existir uma aresta entre u e v e v ainda não foi visitado
             if (grafo.matrizAdj[u][v] == -1 && cor[v] == -1) {
               cor[v] = 1 - cor[u]; // Atribui a cor oposta ao vértice v
@@ -351,7 +351,7 @@ public class MatrizAjdDirec {
       int u = filaPrioridade.poll();
 
       for (int v = 0; v < numVertices; v++) {
-        if (grafo.matrizAdj[u][v] == 1) {
+        if (grafo.matrizAdj[u][v] > 0) {
           int distanciaNova = distancias[u] + grafo.matrizAdj[u][v];
           if (distanciaNova < distancias[v]) {
             distancias[v] = distanciaNova;
@@ -362,13 +362,17 @@ public class MatrizAjdDirec {
       }
     }
 
-    System.out.println("Distância mínima de " + (origem + 1) + " para " + (destino + 1) + ": " + distancias[destino]);
+    if(distancias[destino] == Integer.MAX_VALUE){
+      System.out.println("Não existe caminho de ida");
+    }
+    else{
+      System.out.println("Distância mínima de " + (origem + 1) + " para " + (destino + 1) + ": " + distancias[destino]);
+    }
   }
 
   public static Grafo ponderador(Grafo g) {
     Scanner sc = new Scanner(System.in);
     String peso;
-    System.out.println(g.vertices);
     Grafo copia = new Grafo(g.vertices);
     for (int i = 0; i < copia.vertices; i++) {
       for (int j = 0; j < copia.vertices; j++) {
@@ -415,11 +419,11 @@ public class MatrizAjdDirec {
         System.out.println("[ 4 ] - Sucessores");
         System.out.println("[ 5 ] - Predecessores");
         System.out.println("[ 6 ] - Grau de cada Vértice");
-        System.out.println("[ 7 ] - Verificar Grafo (Bipartido com problema)");
+        System.out.println("[ 7 ] - Verificar Grafo");
         System.out.println("[ 8 ] - Busca em Largura");
         System.out.println("[ 9 ] - Busca em Profundidade");
         System.out.println("[ 10 ] - Ordenação Topológica");
-        System.out.println("[ 11 ] - Caminho mínimo entre dois vértices**");
+        System.out.println("[ 11 ] - Caminho mínimo entre dois vértices");
         System.out.println("[ 0 ] - Sair");
         System.out.println("Qual opção você deseja? ");
         op = sc.nextLine();
