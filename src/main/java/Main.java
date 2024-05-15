@@ -53,7 +53,7 @@ public class Main {
               break;
             }
             case "2":{
-              ListaAdjNDirec.menu();
+              //ListaAdjNDirec.menu();
               break;
             }
             default:{

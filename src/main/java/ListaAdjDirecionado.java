@@ -1,39 +1,29 @@
 import java.util.*;
 
 public class ListaAdjDirecionado {
+
   public static void adicionaAresta(ArrayList<Vertices> grafo, String aresta) {
     String[] aux = aresta.split(",");
-
     int origem = Integer.parseInt(aux[0]) - 1;
     int destino = Integer.parseInt(aux[1]) - 1;
+    int peso = Integer.parseInt(aux[2]); // Adiciona a terceira parte como o peso
 
-    grafo.get(origem).arestas.add(destino + 1);
+    grafo.get(origem).arestas.add(new Arestas(destino + 1, peso));
   }
 
   public static void removeAresta(ArrayList<Vertices> grafo, String aresta) {
     String[] aux = aresta.split(",");
     int origem = Integer.parseInt(aux[0]) - 1;
     int destino = Integer.parseInt(aux[1]) - 1;
-    ArrayList<Integer> vertice = grafo.get(origem).arestas;
+    int peso = Integer.parseInt(aux[2]); // Adiciona a terceira parte como o peso
 
-    for (int i = 0; i < vertice.size(); i++) {
-      if (vertice.get(i) == destino + 1) {
+    ArrayList<Arestas> arestas = grafo.get(origem).arestas;
+
+    for (int i = 0; i < arestas.size(); i++) {
+      Arestas a = arestas.get(i);
+      if (a.destino == destino + 1 && a.peso == peso) {
         grafo.get(origem).arestas.remove(i);
-      }
-    }
-    if (grafo.get(origem).arestas.size() == 0) {
-      boolean flag = true;
-      for (int i = 0; i < grafo.size(); i++) {
-        ArrayList<Integer> arestas = grafo.get(i).arestas;
-        for (int j = 0; j < arestas.size(); j++) {
-          if (origem + 1 == arestas.get(j)) {
-            flag = false;
-            break;
-          }
-        }
-      }
-      if (flag) {
-        grafo.remove(origem);
+        break;
       }
     }
   }
@@ -47,8 +37,8 @@ public class ListaAdjDirecionado {
     System.out.println("\nPredecessores:");
     for (int i = 0; i < grafo.size(); i++) {
       Vertices vertice = grafo.get(i);
-      for (int j = 0; j < vertice.arestas.size(); j++) {
-        predecessores.get(vertice.arestas.get(j) - 1).arestas.add(vertice.rotulo);
+      for (Arestas aresta : vertice.arestas) {
+        predecessores.get(aresta.destino - 1).arestas.add(new Arestas(aresta.destino,vertice.rotulo));
       }
     }
     for (int i = 0; i < predecessores.size(); i++) {
@@ -63,17 +53,17 @@ public class ListaAdjDirecionado {
       }
       System.out.println("]");
     }
-  }
+}
+
 
   public static void printSucessores(ArrayList<Vertices> grafo) {
     System.out.println("\nSucessores:");
     for (int i = 0; i < grafo.size(); i++) {
-      // aqui está imprimindo o rotulo do vértice, ex: 1, 2, 3, 4
       Vertices vertice = grafo.get(i);
       System.out.print("Vértice " + vertice.rotulo + ": [");
-      for (int j = 0; j < vertice.arestas.size(); j++) {
-        System.out.print((vertice.arestas.get(j)));
-        if (j < vertice.arestas.size() - 1) {
+      for (Arestas aresta : vertice.arestas) {
+        System.out.print(aresta.destino);
+        if (grafo.indexOf(vertice) < grafo.size() - 1) {
           System.out.print(", ");
         }
       }
@@ -84,38 +74,33 @@ public class ListaAdjDirecionado {
   public static void grauVertice(ArrayList<Vertices> grafo, int[] grauTotalV) {
     for (int i = 0; i < grafo.size(); i++) {
       Vertices vertice = grafo.get(i);
-      int grauEnt = 0; // Inicializa o grau de entrada para cada vértice
-      int grauSai = vertice.arestas.size(); // Obtém o grau de saída
+      int grauEnt = 0;
+      int grauSai = vertice.arestas.size();
 
-      for (int j = 0; j < grafo.size(); j++) {
-        Vertices outroVertice = grafo.get(j);
-        for (int k = 0; k < outroVertice.arestas.size(); k++) {
-          if (outroVertice.arestas.get(k) == vertice.rotulo) {
+      for (Vertices outroVertice : grafo) {
+        for (Arestas aresta : outroVertice.arestas) {
+          if (aresta.destino == vertice.rotulo) {
             grauEnt++;
           }
         }
       }
 
-      grauTotalV[i] = grauEnt + grauSai; // Calcula o grau total do vértice
+      grauTotalV[i] = grauEnt + grauSai;
     }
   }
 
   public static void imprimeGrauVertice(ArrayList<Vertices> grafo) {
     System.out.println("\nGrau de cada Vértice:");
-    for (int i = 0; i < grafo.size(); i++) {
-      Vertices vertice = grafo.get(i);
+    for (Vertices vertice : grafo) {
       int grauEntrada = 0;
-      // Calcula o grau de entrada
       for (Vertices outroVertice : grafo) {
-        for (int k = 0; k < outroVertice.arestas.size(); k++) {
-          if (outroVertice.arestas.get(k) == vertice.rotulo) {
+        for (Arestas aresta : outroVertice.arestas) {
+          if (aresta.destino == vertice.rotulo) {
             grauEntrada++;
           }
         }
       }
-      // Calcula o grau de saída
       int grauSaida = vertice.arestas.size();
-      // Imprime o grau de entrada, o grau de saída e o grau total do vértice
       System.out.println("Vértice " + vertice.rotulo + ": Grau de Entrada = " + grauEntrada + ", Grau de Saída = "
           + grauSaida);
     }
@@ -126,23 +111,16 @@ public class ListaAdjDirecionado {
 
     for (int i = 0; i < grafo.size(); i++) {
       Vertices vertice = grafo.get(i);
-      ArrayList<Integer> arestas = vertice.arestas;
+      ArrayList<Arestas> arestas = vertice.arestas;
 
-      // Verifica duplicação entre as arestas
-      for (int j = 0; j < arestas.size() - 1; j++) {
-        for (int k = j + 1; k < arestas.size(); k++) {
-          if (arestas.get(j).equals(arestas.get(k))) {
-            simples = false;
-            break;
-          }
-        }
-        if (!simples) {
+      boolean contemRotulo = false;
+      for (Arestas aresta : arestas) {
+        if (aresta.destino == vertice.rotulo) {
+          contemRotulo = true;
           break;
         }
       }
-
-      // Verifica se há laço
-      if (arestas.contains(vertice.rotulo)) {
+      if (contemRotulo) {
         simples = false;
         break;
       }
@@ -215,17 +193,17 @@ public class ListaAdjDirecionado {
       System.out.print(vertAtual);
 
       boolean primVizinho = true;
-      for (Integer vizinho : grafo.get(vertAtual - 1).arestas) {
-        if (!visitei[vizinho - 1]) {
+      for (Arestas vizinho : grafo.get(vertAtual - 1).arestas) {
+        if (!visitei[vizinho.destino - 1]) {
           if (primVizinho) {
             primVizinho = false;
             System.out.print(" -> ");
           } else {
             System.out.print(", ");
           }
-          visitei[vizinho - 1] = true;
-          busca.add(vizinho);
-          System.out.print(vizinho);
+          visitei[vizinho.destino - 1] = true;
+          busca.add(vizinho.destino);
+          System.out.print(vizinho.destino);
         }
       }
       System.out.println();
@@ -251,106 +229,200 @@ public class ListaAdjDirecionado {
   }
 
   private static void pesqProfundidade(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
-    visitei[vertice] = true;
+    visitei[vertice - 1] = true;
     System.out.print(vertice + " ");
 
-    for (Integer vizinho : grafo.get(vertice - 1).arestas) {
-      if (!visitei[vizinho]) {
-        System.out.print(" -> ");
-        pesqProfundidade(grafo, vizinho, visitei);
-      }
+    for (Arestas vizinhoAresta : grafo.get(vertice - 1).arestas) {
+        int vizinho = vizinhoAresta.destino;
+        if (!visitei[vizinho - 1]) {
+            System.out.print(" -> ");
+            pesqProfundidade(grafo, vizinho, visitei);
+        }
     }
-  }
+}
 
-  public static boolean dfsTopologico(ArrayList<Vertices> grafo, int vertice, boolean[] visitei, boolean[] pilhaRec,
-      Stack<Integer> pilha) {
+public static boolean dfsTopologico(ArrayList<Vertices> grafo, int vertice, boolean[] visitei, boolean[] pilhaRec, Stack<Integer> pilha) {
     int indice = vertice - 1; // Obtém o índice real do vértice
 
     if (pilhaRec[indice]) {
-      return true; // Ciclo encontrado
+        return true; // Ciclo encontrado
     }
 
     if (visitei[indice]) {
-      return false; // Já foi visitado e não forma ciclo
+        return false; // Já foi visitado e não forma ciclo
     }
 
     visitei[indice] = true;
     pilhaRec[indice] = true;
 
-    for (int i = 0; i < grafo.get(indice).arestas.size(); i++) {
-      int vizinho = grafo.get(indice).arestas.get(i);
-      if (dfsTopologico(grafo, vizinho, visitei, pilhaRec, pilha)) {
-        return true; // Ciclo encontrado
-      }
+    for (Arestas vizinhoAresta : grafo.get(indice).arestas) {
+        int vizinho = vizinhoAresta.destino;
+        if (dfsTopologico(grafo, vizinho, visitei, pilhaRec, pilha)) {
+            return true; // Ciclo encontrado
+        }
     }
 
     pilhaRec[indice] = false;
     pilha.push(vertice);
 
     return false;
-  }
+}
 
-  public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
-    visitei[vertice] = true;
+public static void dfsConexo(ArrayList<Vertices> grafo, int vertice, boolean[] visitei) {
+    visitei[vertice - 1] = true;
 
-    for (int i = 0; i < grafo.get(vertice - 1).arestas.size(); i++) {
-      int vizinho = grafo.get(vertice - 1).arestas.get(i);
-      if (!visitei[vizinho]) {
-        dfsConexo(grafo, vizinho, visitei);
-      }
+    for (Arestas vizinhoAresta : grafo.get(vertice - 1).arestas) {
+        int vizinho = vizinhoAresta.destino;
+        if (!visitei[vizinho - 1]) {
+            dfsConexo(grafo, vizinho, visitei);
+        }
     }
-  }
+}
 
-  public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
-    boolean[] visitado = new boolean[numVertices + 1];
+public static void grafoConexo(ArrayList<Vertices> grafo, int numVertices) {
+    boolean[] visitado = new boolean[numVertices];
     boolean conexo = true;
 
     // Realiza a busca em profundidade a partir do primeiro vértice
     dfsConexo(grafo, 1, visitado);
 
     // Verifica se todos os vértices foram alcançados
-    for (int i = 1; i <= numVertices; i++) {
-      if (!visitado[i]) {
-        conexo = false; // Grafo não é conexo
-        break;
-      }
+    for (int i = 0; i < numVertices; i++) {
+        if (!visitado[i]) {
+            conexo = false; // Grafo não é conexo
+            break;
+        }
     }
 
     if (conexo) {
-      System.out.println("O grafo é conexo.");
+        System.out.println("O grafo é conexo.");
     } else {
-      System.out.println("O grafo não é conexo.");
+        System.out.println("O grafo não é conexo.");
     }
+}
+
+public static void prim(ArrayList<Vertices> grafo) {
+  int numVertices = grafo.size();
+  boolean[] visitado = new boolean[numVertices];
+  int[] custoMinimo = new int[numVertices];
+  int[] pai = new int[numVertices];
+
+  for (int i = 0; i < numVertices; i++) {
+      custoMinimo[i] = Integer.MAX_VALUE;
   }
+
+  custoMinimo[0] = 0;
+  pai[0] = -1;
+
+  for (int i = 0; i < numVertices - 1; i++) {
+      int u = minimoCusto(grafo, custoMinimo, visitado);
+
+      visitado[u] = true;
+
+      for (Arestas aresta : grafo.get(u).arestas) {
+          int v = aresta.destino;
+          int peso = aresta.peso;
+          if (!visitado[v] && peso < custoMinimo[v]) {
+              pai[v] = u;
+              custoMinimo[v] = peso; 
+          }
+      }
+  }
+
+  System.out.println("Árvore geradora mínima (Prim):");
+  for (int i = 1; i < numVertices; i++) {
+      System.out.println("Aresta: " + (pai[i]+1) + " - " + (i+1) + ", Peso: " + custoMinimo[i]);
+  }
+}
+
+private static int minimoCusto(ArrayList<Vertices> grafo, int[] custoMinimo, boolean[] visitado) {
+  int minimo = Integer.MAX_VALUE;
+  int minimoIndice = -1;
+
+  for (int v = 0; v < grafo.size(); v++) {
+      if (!visitado[v] && custoMinimo[v] < minimo) {
+          minimo = custoMinimo[v];
+          minimoIndice = v;
+      }
+  }
+
+  return minimoIndice;
+}
+
+
+public static void dijkstra(ArrayList<Vertices> grafo, int origem) {
+  int numVertices = grafo.size();
+  boolean[] visitado = new boolean[numVertices];
+  int[] distancia = new int[numVertices];
+
+  for (int i = 0; i < numVertices; i++) {
+      distancia[i] = Integer.MAX_VALUE;
+  }
+
+  distancia[origem] = 0;
+
+  for (int i = 0; i < numVertices; i++) {
+      int u = minimaDistancia(distancia, visitado);
+
+      visitado[u] = true;
+
+      for (Arestas aresta : grafo.get(u).arestas) {
+          int v = aresta.destino;
+          int peso = aresta.peso;
+          if (!visitado[v]) {
+            if (distancia[u] != Integer.MAX_VALUE && distancia[u] + peso < distancia[v]) {
+                distancia[v] = distancia[u] + peso;
+            }
+        }
+      }
+  }
+
+  System.out.println("Caminhos mínimos (Dijkstra) a partir do vértice " + origem + ":");
+  for (int i = 0; i < numVertices; i++) {
+      System.out.println("Vértice " + (origem+1) + " -> Vértice " + (i+1) + ": " + distancia[i]);
+  }
+}
+
+private static int minimaDistancia(int[] distancia, boolean[] visitado) {
+  int minimo = Integer.MAX_VALUE;
+  int minimoIndice = -1;
+
+  for (int v = 0; v < distancia.length; v++) {
+      if (!visitado[v] && distancia[v] < minimo) {
+          minimo = distancia[v];
+          minimoIndice = v;
+      }
+  }
+
+  return minimoIndice;
+}
+
+
 
   public static void menu() {
     Scanner sc = new Scanner(System.in);
 
     System.out.println("Digite o número de vertices do seu grafo: ");
-    int numVertices = sc.nextInt();
+    int numVertices = Integer.parseInt(sc.nextLine());
     System.out.println("Digite o número de arestas do seu grafo: ");
-    int numArestas = sc.nextInt();
-    // alocando para receber as futuras listas
+    int numArestas = Integer.parseInt(sc.nextLine());
+
     ArrayList<Vertices> grafo = new ArrayList<Vertices>();
-    // aqui está criando a lista inicial que futuramente receberá suas arestas, ex:
-    // 1, 2, 3 e 4.
     for (int i = 0; i < numVertices; i++) {
       grafo.add(new Vertices(i + 1));
     }
 
-    // aqui está adicionando as arestas no grafo
     for (int i = 0; i < numArestas; i++) {
-      sc.nextLine(); // Consumir quebra de linha
-      System.out.println("Digite as arestas, formato - 1,2: ");
-      String combinacao = sc.next();
+      
+      System.out.println("Digite as arestas, formato - 1,2,peso: ");
+      String combinacao = sc.nextLine();
 
       String[] aux = combinacao.split(",");
-      // aqui está adicionando as arestas no grafo, -1 para corrigir o indice do
-      // vetor, pois o indice começa em 0 e não em 1.
       int origem = Integer.parseInt(aux[0]) - 1;
       int destino = Integer.parseInt(aux[1]) - 1;
+      int peso = Integer.parseInt(aux[2]);
 
-      grafo.get(origem).arestas.add(destino + 1);
+      grafo.get(origem).arestas.add(new Arestas(destino + 1, peso));
       grafo.get(origem).rotulo = origem + 1;
     }
 
@@ -372,102 +444,80 @@ public class ListaAdjDirecionado {
       System.out.println("[ 10 ] - Caminho mínimo entre dois vértices**");
       System.out.println("[ 0 ] - Sair");
       System.out.println("Qual opção você deseja? ");
-      op = sc.nextInt();
+      op = Integer.parseInt(sc.nextLine());
 
       switch (op) {
         case 1: {
           sc.nextLine();
-          System.out.println("Digite a aresta que deseja adicionar - Exemplo: 1,2: ");
+          System.out.println("Digite a aresta que deseja adicionar - Exemplo: 1,2,peso: ");
           String novaAresta = sc.nextLine();
           adicionaAresta(grafo, novaAresta);
-
           break;
-
         }
         case 2: {
           sc.nextLine();
           System.out.println("Digite a aresta que deseja remover - Exemplo: 1,2: ");
           String removerAresta = sc.nextLine();
           removeAresta(grafo, removerAresta);
-
           break;
-
         }
         case 3: {
-
           printSucessores(grafo);
-
           break;
-
         }
         case 4: {
-
           printPredecessores(grafo);
-
           break;
-
         }
         case 5: {
           imprimeGrauVertice(grafo);
-
           break;
-
         }
         case 6: {
           System.out.println("\n\n");
-          // verificação se o grafo é simples
           grafoSimples(grafo);
           System.out.println("\n");
-
-          // verificação se o grafo é regular
           grafoRegular(grafo, grauTotalV);
           System.out.println("\n");
-
-          // verificação se o grafo é completo
           grafoCompleto(grafo, grauTotalV);
           System.out.println("\n");
-          // verificação se o grafo é bipartido
           grafoConexo(grafo, numVertices);
-
           break;
-
         }
         case 7: {
           System.out.println("\n\n");
           System.out.println("Digite o vértice de início para a busca em largura:");
-          int inicio = sc.nextInt();
+          int inicio = Integer.parseInt(sc.nextLine());
           buscaLargura(grafo, inicio);
-
           break;
         }
         case 8: {
           System.out.println("Digite o vértice de início para a busca em profundidade:");
-          int inicio = sc.nextInt();
+          int inicio = Integer.parseInt(sc.nextLine());
           buscaProfundidade(grafo, inicio);
-
           break;
         }
         case 9: {
-
+          prim(grafo);
           break;
-        }
-
+      }
+      case 10: {
+          System.out.println("Digite o vértice de origem para encontrar o caminho mínimo:");
+          int origem10 = Integer.parseInt(sc.nextLine());
+          dijkstra(grafo, origem10);
+          break;
+      }
+      
         case 0: {
-
           System.out.println("Até logo!");
           break;
-
         }
         default: {
-
           System.out.println("Opção inválida, tente novamente");
           System.out.println("\n\n");
           break;
-
         }
       }
-
     } while (op != 0);
   }
-
 }
