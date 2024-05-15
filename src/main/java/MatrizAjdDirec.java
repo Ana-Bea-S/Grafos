@@ -51,21 +51,21 @@ public class MatrizAjdDirec {
   }
 
   public static void grauVertice(Grafo grafo, int numVertice) {
-    for (int i = 0; i <  numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       int grau = 0;
       for (int j = 0; j < numVertice; j++) {
         grau += Math.abs(grafo.matrizAdj[i][j]);
       }
-      System.out.println("Grau do vértice " + (i+1) + ": " + grau);
+      System.out.println("Grau do vértice " + (i + 1) + ": " + grau);
     }
   }
 
   public static void imprimeSucessores(Grafo grafo, int numVertice) {
-    for (int i = 0; i <  numVertice; i++) {
-      System.out.print("Sucessores do vértice " + (i+1) + ": ");
+    for (int i = 0; i < numVertice; i++) {
+      System.out.print("Sucessores do vértice " + (i + 1) + ": ");
       for (int j = 0; j < numVertice; j++) {
         if (grafo.matrizAdj[i][j] == 1) {
-          System.out.print((j+1) + " ");
+          System.out.print((j + 1) + " ");
         }
       }
       System.out.println();
@@ -73,11 +73,11 @@ public class MatrizAjdDirec {
   }
 
   public static void imprimePredecessores(Grafo grafo, int numVertice) {
-    for (int i = 0; i <  numVertice; i++) {
-      System.out.print("Predecessores do vértice " + (i+1) + ": ");
+    for (int i = 0; i < numVertice; i++) {
+      System.out.print("Predecessores do vértice " + (i + 1) + ": ");
       for (int j = 0; j < numVertice; j++) {
         if (grafo.matrizAdj[i][j] == -1) {
-          System.out.print((j+1) + " ");
+          System.out.print((j + 1) + " ");
         }
       }
       System.out.println();
@@ -86,7 +86,7 @@ public class MatrizAjdDirec {
 
   public static void grafoSimples(Grafo grafo, int numVertice) {
     boolean simples = true;
-    for (int i = 0; i <  numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       for (int j = 0; j < numVertice; j++) {
         if (i != j && Math.abs(grafo.matrizAdj[i][j]) != 1 && grafo.matrizAdj[i][j] != 0) {
           simples = false;
@@ -98,7 +98,7 @@ public class MatrizAjdDirec {
       }
     }
     // Verifica loops
-    for (int i = 0; i <  numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       if (grafo.matrizAdj[i][i] != 0) {
         simples = false;
         break;
@@ -113,7 +113,7 @@ public class MatrizAjdDirec {
 
   public static void grafoCompleto(Grafo grafo, int numVertice) {
     boolean completo = true;
-    for (int i = 0; i <  numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       for (int j = 0; j < numVertice; j++) {
         if (i != j && grafo.matrizAdj[i][j] != -1 && grafo.matrizAdj[i][j] != 1) {
           completo = false;
@@ -138,7 +138,7 @@ public class MatrizAjdDirec {
       grau += Math.abs(grafo.matrizAdj[1][j]);
     }
 
-    for (int i = 2; i <  numVertice; i++) {
+    for (int i = 2; i < numVertice; i++) {
       int grauAtual = 0;
       for (int j = 0; j < numVertice; j++) {
         grauAtual += Math.abs(grafo.matrizAdj[i][j]);
@@ -160,12 +160,12 @@ public class MatrizAjdDirec {
     int[] cor = new int[numVertice + 1]; // Array para armazenar a cor de cada vértice (1 e -1)
 
     // Inicializa todas as cores como não visitadas (-1)
-    for (int i = 0; i <  numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       cor[i] = -1;
     }
 
     // Inicia a busca em largura em todos os vértices
-    for (int i = 0; i <  numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       if (cor[i] == -1) { // Se o vértice ainda não foi visitado, inicia a BFS a partir dele
         cor[i] = 1; // Define a cor do vértice inicial como 1
         Queue<Integer> fila = new LinkedList<>();
@@ -206,7 +206,7 @@ public class MatrizAjdDirec {
       System.out.println();
     }
 
-    for (int i = 0; i <  numVertices; i++) {
+    for (int i = 0; i < numVertices; i++) {
       if (!visitei[i]) {
         numArvores++;
         System.out.print("Árvore " + numArvores + ": ");
@@ -241,7 +241,7 @@ public class MatrizAjdDirec {
       System.out.print(++vertAtual);
 
       boolean primVizinho = true;
-      for (int i = 0; i <  numVertices; i++) {
+      for (int i = 0; i < numVertices; i++) {
         if (grafo.matrizAdj[vertAtual][i] == -1 && !visitei[i]) {
           if (primVizinho) {
             primVizinho = false;
@@ -289,7 +289,7 @@ public class MatrizAjdDirec {
     boolean[] visitei = new boolean[numVertices + 1];
     boolean[] pilhaRec = new boolean[numVertices + 1];
 
-    for (int i = 0; i <  numVertices; i++) {
+    for (int i = 0; i < numVertices; i++) {
       if (!visitei[i] && dfsTopologico(grafo, i, visitei, pilhaRec, pilha)) {
         System.out.println("O grafo contém um ciclo!");
         return;
@@ -298,7 +298,7 @@ public class MatrizAjdDirec {
 
     System.out.println("Ordenação Topológica:");
     while (!pilha.isEmpty()) {
-      System.out.print(pilha.pop()+1);
+      System.out.print(pilha.pop() + 1);
       if (!pilha.isEmpty()) {
         System.out.print(" -> ");
       }
@@ -324,7 +324,7 @@ public class MatrizAjdDirec {
     dfsConexo(grafo, 0, visitado);
 
     // Verifica se todos os vértices foram alcançados
-    for (int i = 0; i <  numVertices; i++) {
+    for (int i = 0; i < numVertices; i++) {
       if (!visitado[i]) {
         conexo = false; // Grafo não é conexo
         break;
@@ -339,29 +339,30 @@ public class MatrizAjdDirec {
   }
 
   public static void dijkstra(Grafo grafo, int origem, int destino, int numVertices) {
-    int[] distancia = new int[numVertices];
-    boolean[] visitado = new boolean[numVertices];
+    int[] distancias = new int[numVertices];
+    Arrays.fill(distancias, Integer.MAX_VALUE);
+    distancias[origem] = 0;
 
-    Arrays.fill(distancia, Integer.MAX_VALUE);
-    distancia[origem] = 0;
-
-    PriorityQueue<Integer> filaPrioridade = new PriorityQueue<>(numVertices, Comparator.comparingInt(o -> distancia[o]));
+    PriorityQueue<Integer> filaPrioridade = new PriorityQueue<>(numVertices,
+        Comparator.comparingInt(a -> distancias[a]));
     filaPrioridade.add(origem);
 
     while (!filaPrioridade.isEmpty()) {
       int u = filaPrioridade.poll();
-      visitado[u] = true;
 
       for (int v = 0; v < numVertices; v++) {
-        if (grafo.matrizAdj[u][v] == -1 && !visitado[v] && distancia[u] != Integer.MAX_VALUE &&
-            distancia[u] + grafo.matrizAdj[u][v] < distancia[v]) {
-          distancia[v] = distancia[u] + grafo.matrizAdj[u][v];
-          filaPrioridade.add(v);
+        if (grafo.matrizAdj[u][v] == 1) {
+          int distanciaNova = distancias[u] + grafo.matrizAdj[u][v];
+          if (distanciaNova < distancias[v]) {
+            distancias[v] = distanciaNova;
+            filaPrioridade.remove(v);
+            filaPrioridade.add(v);
+          }
         }
       }
     }
 
-    System.out.println("Distância mínima de " + origem + " para " + destino + ": " + distancia[destino]);
+    System.out.println("Distância mínima de " + (origem + 1) + " para " + (destino + 1) + ": " + distancias[destino]);
   }
 
   public static Grafo ponderador(Grafo g) {
@@ -370,16 +371,16 @@ public class MatrizAjdDirec {
     System.out.println(g.vertices);
     Grafo copia = new Grafo(g.vertices);
     for (int i = 0; i < copia.vertices; i++) {
-        for (int j = 0; j < copia.vertices; j++) {
-            if (g.matrizAdj[i][j] == 1) {
-                System.out.println("Adicione o peso para " + (i+1) + "," + (j+1) + ":");
-                peso = sc.nextLine();
-                copia.matrizAdj[i][j] = Integer.parseInt(peso); 
-            }
+      for (int j = 0; j < copia.vertices; j++) {
+        if (g.matrizAdj[i][j] == 1) {
+          System.out.println("Adicione o peso para " + (i + 1) + "," + (j + 1) + ":");
+          peso = sc.nextLine();
+          copia.matrizAdj[i][j] = Integer.parseInt(peso);
         }
+      }
     }
     return copia;
-}
+  }
 
   public static void menu() {
     int numVertice, numAresta;
@@ -392,7 +393,6 @@ public class MatrizAjdDirec {
       System.out.println("Digite o número de arestas: ");
       numAresta = Integer.parseInt(sc.nextLine());
 
-
       grafo = new Grafo(numVertice);
 
       for (int i = 0; i < numAresta; i++) {
@@ -403,7 +403,7 @@ public class MatrizAjdDirec {
         origem = Integer.parseInt(aux[0]);
         destino = Integer.parseInt(aux[1]);
 
-        criaAresta(grafo, origem -1, destino -1);
+        criaAresta(grafo, origem - 1, destino - 1);
       }
 
       String op;
@@ -425,7 +425,7 @@ public class MatrizAjdDirec {
         op = sc.nextLine();
         switch (op) {
           case "1": {
-              
+
             int origem, destino;
             System.out.println("Digite a aresta que deseja adicionar, formato - 1,2: ");
             String combinacao = sc.nextLine();
@@ -433,96 +433,89 @@ public class MatrizAjdDirec {
             origem = Integer.parseInt(aux[0]);
             destino = Integer.parseInt(aux[1]);
 
-            criaAresta(grafo, origem -1, destino -1);
-             
+            criaAresta(grafo, origem - 1, destino - 1);
+
             break;
           }
           case "2": {
-              
+
             int origem, destino;
             System.out.println("Digite a aresta que deseja remover, formato - 1,2: ");
             String combinacao = sc.nextLine();
             String[] aux = combinacao.split(",");
             origem = Integer.parseInt(aux[0]);
             destino = Integer.parseInt(aux[1]);
-            removeAresta(grafo, origem -1, destino -1);
-             
+            removeAresta(grafo, origem - 1, destino - 1);
+
             break;
           }
           case "3": {
-              
 
             imprimeGrafo(grafo, numVertice);
 
-             
             break;
           }
           case "4": {
-              
 
             imprimeSucessores(grafo, numVertice);
 
-             
             break;
           }
           case "5": {
-              
 
             imprimePredecessores(grafo, numVertice);
 
-             
             break;
           }
           case "6": {
-              
 
             grauVertice(grafo, numVertice);
-             
+
             break;
           }
           case "7": {
-              
+
             // verificar se é simples
             grafoSimples(grafo, numVertice);
-              
+
             // verificar se é completo
             grafoCompleto(grafo, numVertice);
-              
+
             // verificar se é regular
             grafoRegular(grafo, numVertice);
-              
+
             // verificar se é bipartido
             grafoBipartido(grafo, numVertice);
-              
+
             // verificar se é conexo
             grafoConexo(grafo, numVertice);
-             
+
             break;
           }
           case "8": {
-               
+
             System.out.println("Digite o vértice em que deseja iniciar sua busca em largura: ");
             int vertOrigem = Integer.parseInt(sc.nextLine());
 
             System.out.print("Busca em Largura:  ");
-            buscaLargura(grafo, vertOrigem-1, numVertice);
-             
+            buscaLargura(grafo, vertOrigem - 1, numVertice);
+
             break;
           }
           case "9": {
-               
+
             System.out.println("Digite o vértice em que deseja iniciar sua busca em profundidade: ");
             int vertOrigem = Integer.parseInt(sc.nextLine());
 
             System.out.print("Busca em Profundidade:  ");
-            buscaProfundidade(grafo, vertOrigem-1, numVertice);
-             
+            buscaProfundidade(grafo, vertOrigem - 1, numVertice);
+
             break;
           }
           case "10": {
-               
+
             ordenacaoTopologica(grafo, numVertice);
-              
+
             break;
           }
           case "11": {
@@ -534,7 +527,7 @@ public class MatrizAjdDirec {
             System.out.println("Digite o vértice de destino para o algoritmo de Dijkstra: ");
             int vertDestino = Integer.parseInt(sc.nextLine());
 
-            dijkstra(copia, vertOrigem-1, vertDestino-1, numVertice);
+            dijkstra(copia, vertOrigem - 1, vertDestino - 1, numVertice);
 
             break;
           }
