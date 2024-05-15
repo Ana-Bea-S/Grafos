@@ -27,14 +27,14 @@ public class MatrizAdjNaoDirec {
   
     // Imprime o cabeçalho das colunas
     System.out.print("   ");
-    for (int i = 1; i <= numVertice; i++) {
-      System.out.printf("%-" + maxLength + "d ", i);
+    for (int i = 0; i < numVertice; i++) {
+      System.out.printf("%-" + maxLength + "d ", i + 1);
     }
     System.out.println();
   
     // Imprime a linha divisória entre o cabeçalho das colunas e o conteúdo da matriz
     System.out.print("---");
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       for (int j = 0; j < maxLength; j++) {
         System.out.print("-");
       }
@@ -43,10 +43,10 @@ public class MatrizAdjNaoDirec {
     System.out.println();
   
     // Imprime o conteúdo da matriz
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       // Imprime o índice da linha
-      System.out.printf("%-" + maxLength + "d |", i);
-      for (int j = 1; j <= numVertice; j++) {
+      System.out.printf("%-" + maxLength + "d |", (i+1));
+      for (int j = 0; j < numVertice; j++) {
         // Imprime o valor da matriz (ou o peso da aresta)
         System.out.printf("%-" + maxLength + "d ", grafo.matrizAdj[i][j]);
       }
@@ -56,9 +56,9 @@ public class MatrizAdjNaoDirec {
   
 
   public static void grauVertice(Grafo2 grafo, int numVertice) {
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       int grau = 0;
-      for (int j = 1; j <= numVertice; j++) {
+      for (int j = 0; j < numVertice; j++) {
         grau += grafo.matrizAdj[i][j];
       }
       System.out.println("Grau do vértice " + i + ": " + grau);
@@ -67,9 +67,9 @@ public class MatrizAdjNaoDirec {
   
 
   public static void imprimeVizinhanca(Grafo2 grafo, int numVertice) {
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       System.out.print("Vizinhanças do vértice " + i + ": ");
-      for (int j = 1; j <= numVertice; j++) {
+      for (int j = 0; j < numVertice; j++) {
         if (grafo.matrizAdj[i][j] != 0) {
           System.out.print(j + "(" + grafo.matrizAdj[i][j] + ") ");
         }
@@ -82,8 +82,8 @@ public class MatrizAdjNaoDirec {
   public static void grafoSimples(Grafo2 grafo, int numVertice) {
     boolean simples = true;
     // procura se tem arestas paralelas
-    for (int i = 1; i <= numVertice; i++) {
-      for (int j = 1; j <= numVertice; j++) {
+    for (int i = 0; i < numVertice; i++) {
+      for (int j = 0; j < numVertice; j++) {
         if (grafo.matrizAdj[i][j] > 1) {
           simples = false;
           break;
@@ -94,7 +94,7 @@ public class MatrizAdjNaoDirec {
       }
     }
     // procura se tem arestas com laços
-    for (int i = 1; i <= numVertice; i++) {
+    for (int i = 0; i < numVertice; i++) {
       if (grafo.matrizAdj[i][i] > 0) {
         simples = false;
         break;
@@ -111,13 +111,13 @@ public class MatrizAdjNaoDirec {
   public static void grafoRegular(Grafo2 grafo, int numVertice) {
     boolean regular = true;
     int grau = 0;
-    for (int j = 1; j <= numVertice; j++) {
+    for (int j = 0; j < numVertice; j++) {
       grau += grafo.matrizAdj[1][j];
     }
 
     for (int i = 2; i <= numVertice; i++) {
       int grauAtual = 0;
-      for (int j = 1; j <= numVertice; j++) {
+      for (int j = 0; j < numVertice; j++) {
         grauAtual += grafo.matrizAdj[i][j];
       }
       if (grauAtual != grau) {
@@ -135,8 +135,8 @@ public class MatrizAdjNaoDirec {
 
   public static void grafoCompleto(Grafo2 grafo, int numVertice) {
     boolean completo = true;
-    for (int i = 1; i <= numVertice; i++) {
-      for (int j = 1; j <= numVertice; j++) {
+    for (int i = 0; i < numVertice; i++) {
+      for (int j = 0; j < numVertice; j++) {
         if (i != j && grafo.matrizAdj[i][j] != 1) {
           completo = false;
           break;
@@ -168,7 +168,7 @@ public class MatrizAdjNaoDirec {
 
       for (int i = 0; i < numAresta; i++) {
         int origem, destino;
-        System.out.println("Digite as arestas e o peso, formato - 1,2,3 (vértice 1 para vértice 2 com peso 3): ");
+        System.out.println("Digite as arestas e o peso, formato - 1,2,peso: ");
         String combinacao = sc.next();
         String[] aux = combinacao.split(",");
         origem = Integer.parseInt(aux[0]);
@@ -197,14 +197,14 @@ public class MatrizAdjNaoDirec {
           case 1: {
             System.out.println("\n\n");
             int origem, destino, peso;
-            System.out.println("Digite a aresta que deseja adicionar, formato - 1,2,3: ");
+            System.out.println("Digite a aresta que deseja adicionar, formato - 1,2,peso: ");
             String combinacao = sc.next();
             String[] aux = combinacao.split(",");
             origem = Integer.parseInt(aux[0]);
             destino = Integer.parseInt(aux[1]);
             peso = Integer.parseInt(aux[2]);
 
-            criaAresta(grafo, origem, destino, peso);
+            criaAresta(grafo, origem-1, destino-1, peso);
             System.out.println("\n\n\n\n");
             break;
           }
@@ -216,7 +216,7 @@ public class MatrizAdjNaoDirec {
             String[] aux = combinacao.split(",");
             origem = Integer.parseInt(aux[0]);
             destino = Integer.parseInt(aux[1]);
-            removeAresta(grafo, origem, destino);
+            removeAresta(grafo, origem-1, destino-1);
             System.out.println("\n\n\n\n");
             break;
           }
