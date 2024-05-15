@@ -73,7 +73,7 @@ public class Main {
           break;
         }
       }
-    }while(op!="0");
+    }while(!op.equals("0"));
 
     sc.close();
   }

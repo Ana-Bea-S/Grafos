@@ -1,13 +1,16 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class MatrizAdjNaoDirec {
 
   public static void criaAresta(Grafo2 grafo, int origem, int destino, int peso) {
-    try {
+    int numVertices = grafo.vertices;
+    if (origem >= 0 && origem < numVertices && destino >= 0 && destino < numVertices) {
       grafo.matrizAdj[origem][destino] = peso;
       // Deixe a matriz simétrica
       grafo.matrizAdj[destino][origem] = peso;
-    } catch (ArrayIndexOutOfBoundsException index) {
+    } else {
       System.out.println("Vértice não existente");
     }
   }
@@ -21,18 +24,19 @@ public class MatrizAdjNaoDirec {
 
   public static void imprimeGrafo(Grafo2 grafo, int numVertice) {
     System.out.println("Matriz Adjacente: \n");
-  
+
     // Calcula o comprimento máximo dos índices
     int maxLength = String.valueOf(numVertice).length();
-  
+
     // Imprime o cabeçalho das colunas
     System.out.print("   ");
     for (int i = 0; i < numVertice; i++) {
       System.out.printf("%-" + maxLength + "d ", i + 1);
     }
     System.out.println();
-  
-    // Imprime a linha divisória entre o cabeçalho das colunas e o conteúdo da matriz
+
+    // Imprime a linha divisória entre o cabeçalho das colunas e o conteúdo da
+    // matriz
     System.out.print("---");
     for (int i = 0; i < numVertice; i++) {
       for (int j = 0; j < maxLength; j++) {
@@ -41,11 +45,11 @@ public class MatrizAdjNaoDirec {
       System.out.print(" ");
     }
     System.out.println();
-  
+
     // Imprime o conteúdo da matriz
     for (int i = 0; i < numVertice; i++) {
       // Imprime o índice da linha
-      System.out.printf("%-" + maxLength + "d |", (i+1));
+      System.out.printf("%-" + maxLength + "d |", (i + 1));
       for (int j = 0; j < numVertice; j++) {
         // Imprime o valor da matriz (ou o peso da aresta)
         System.out.printf("%-" + maxLength + "d ", grafo.matrizAdj[i][j]);
@@ -53,7 +57,6 @@ public class MatrizAdjNaoDirec {
       System.out.println();
     }
   }
-  
 
   public static void grauVertice(Grafo2 grafo, int numVertice) {
     for (int i = 0; i < numVertice; i++) {
@@ -61,10 +64,9 @@ public class MatrizAdjNaoDirec {
       for (int j = 0; j < numVertice; j++) {
         grau += grafo.matrizAdj[i][j];
       }
-      System.out.println("Grau do vértice " + i + ": " + grau);
+      System.out.println("Grau do vértice " + (i + 1) + ": " + grau);
     }
   }
-  
 
   public static void imprimeVizinhanca(Grafo2 grafo, int numVertice) {
     for (int i = 0; i < numVertice; i++) {
@@ -77,26 +79,18 @@ public class MatrizAdjNaoDirec {
       System.out.println();
     }
   }
-  
 
   public static void grafoSimples(Grafo2 grafo, int numVertice) {
     boolean simples = true;
-    // procura se tem arestas paralelas
+    // procura se tem arestas paralelas ou laços
     for (int i = 0; i < numVertice; i++) {
       for (int j = 0; j < numVertice; j++) {
-        if (grafo.matrizAdj[i][j] > 1) {
+        if (grafo.matrizAdj[i][j] > 1 || (i == j && grafo.matrizAdj[i][j] > 0)) {
           simples = false;
           break;
         }
       }
       if (!simples) {
-        break;
-      }
-    }
-    // procura se tem arestas com laços
-    for (int i = 0; i < numVertice; i++) {
-      if (grafo.matrizAdj[i][i] > 0) {
-        simples = false;
         break;
       }
     }
@@ -137,7 +131,7 @@ public class MatrizAdjNaoDirec {
     boolean completo = true;
     for (int i = 0; i < numVertice; i++) {
       for (int j = 0; j < numVertice; j++) {
-        if (i != j && grafo.matrizAdj[i][j] != 1) {
+        if (i != j && grafo.matrizAdj[i][j] == 0) {
           completo = false;
           break;
         }
@@ -154,6 +148,44 @@ public class MatrizAdjNaoDirec {
     }
   }
 
+  public static void buscaEmLargura(Grafo2 grafo, int verticeInicial, int numVertices) {
+    boolean visitados[] = new boolean[numVertices];
+    Queue<Integer> fila = new LinkedList<>();
+
+    visitados[verticeInicial] = true;
+    fila.add(verticeInicial);
+
+    while (!fila.isEmpty()) {
+      int verticeAtual = fila.poll();
+      System.out.print(verticeAtual + 1 + " ");
+
+      for (int i = 0; i < numVertices; i++) {
+        if (grafo.matrizAdj[verticeAtual][i] != 0 && !visitados[i]) {
+          visitados[i] = true;
+          fila.add(i);
+        }
+      }
+    }
+    System.out.println();
+  }
+
+  public static void buscaEmProfundidade(Grafo2 grafo, int verticeInicial, boolean[] visitados) {
+    visitados[verticeInicial] = true;
+    System.out.print(verticeInicial + 1 + " ");
+
+    for (int i = 0; i < visitados.length; i++) {
+      if (grafo.matrizAdj[verticeInicial][i] != 0 && !visitados[i]) {
+        buscaEmProfundidade(grafo, i, visitados);
+      }
+    }
+  }
+
+  public static void buscaEmProfundidadeMain(Grafo2 grafo, int verticeInicial, int numVertices) {
+    boolean visitados[] = new boolean[numVertices];
+    buscaEmProfundidade(grafo, verticeInicial, visitados);
+    System.out.println();
+  }
+
   public static void menu() {
     int numVertice, numAresta;
     Scanner sc = new Scanner(System.in);
@@ -167,15 +199,15 @@ public class MatrizAdjNaoDirec {
       grafo = new Grafo2(numVertice);
 
       for (int i = 0; i < numAresta; i++) {
-        int origem, destino;
+        int origem, destino, peso;
         System.out.println("Digite as arestas e o peso, formato - 1,2,peso: ");
         String combinacao = sc.next();
         String[] aux = combinacao.split(",");
         origem = Integer.parseInt(aux[0]);
         destino = Integer.parseInt(aux[1]);
-        int peso = Integer.parseInt(aux[2]);
+        peso = Integer.parseInt(aux[2]);
 
-        criaAresta(grafo, origem, destino, peso);
+        criaAresta(grafo, origem - 1, destino - 1, peso);
 
       }
 
@@ -189,6 +221,10 @@ public class MatrizAdjNaoDirec {
         System.out.println("[ 4 ] - Vizinhança");
         System.out.println("[ 5 ] - Grau de cada Vértice");
         System.out.println("[ 6 ] - Verificação do Grafo");
+        System.out.println("[ 7 ] - Busca em Largura");
+        System.out.println("[ 8 ] - Busca em Profundidade");
+        System.out.println("[ 9 ] - Árvore Geradora Mínima**");
+        System.out.println("[ 10 ] - Caminho mínimo entre dois vértices**");
         System.out.println("[ 0 ] - Sair");
         System.out.println("Qual opção você deseja? ");
         op = sc.nextInt();
@@ -204,7 +240,7 @@ public class MatrizAdjNaoDirec {
             destino = Integer.parseInt(aux[1]);
             peso = Integer.parseInt(aux[2]);
 
-            criaAresta(grafo, origem-1, destino-1, peso);
+            criaAresta(grafo, origem - 1, destino - 1, peso);
             System.out.println("\n\n\n\n");
             break;
           }
@@ -216,7 +252,7 @@ public class MatrizAdjNaoDirec {
             String[] aux = combinacao.split(",");
             origem = Integer.parseInt(aux[0]);
             destino = Integer.parseInt(aux[1]);
-            removeAresta(grafo, origem-1, destino-1);
+            removeAresta(grafo, origem - 1, destino - 1);
             System.out.println("\n\n\n\n");
             break;
           }
@@ -261,6 +297,25 @@ public class MatrizAdjNaoDirec {
             System.out.println("\n\n\n\n");
             break;
 
+          }
+          case 7: {
+            System.out.println("\n\n");
+            System.out.println("Digite o vértice inicial para a busca em largura: ");
+            int verticeInicial = sc.nextInt();
+            System.out.println("Busca em Largura: ");
+            buscaEmLargura(grafo, verticeInicial - 1, numVertice);
+            System.out.println("\n\n\n\n");
+            break;
+          }
+
+          case 8: {
+            System.out.println("\n\n");
+            System.out.println("Digite o vértice inicial para a busca em profundidade: ");
+            int verticeInicial = sc.nextInt();
+            System.out.println("Busca em Profundidade: ");
+            buscaEmProfundidadeMain(grafo, verticeInicial - 1, numVertice);
+            System.out.println("\n\n\n\n");
+            break;
           }
           case 0: {
             System.out.println("Até logo!");

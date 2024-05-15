@@ -541,7 +541,7 @@ public class MatrizAjdDirec {
           }
         }
 
-      } while (op != "0");
+      } while (!op.equals("0"));
 
     } catch (Exception E) {
       System.out.println(E.getMessage());
