@@ -125,37 +125,36 @@ public class ListaAdjDirecionado {
     boolean simples = true;
 
     for (int i = 0; i < grafo.size(); i++) {
-        Vertices vertice = grafo.get(i);
-        ArrayList<Integer> arestas = vertice.arestas;
+      Vertices vertice = grafo.get(i);
+      ArrayList<Integer> arestas = vertice.arestas;
 
-        // Verifica duplicação entre as arestas
-        for (int j = 0; j < arestas.size() - 1; j++) {
-            for (int k = j + 1; k < arestas.size(); k++) {
-                if (arestas.get(j).equals(arestas.get(k))) {
-                    simples = false;
-                    break;
-                }
-            }
-            if (!simples) {
-                break; 
-            }
-        }
-
-        // Verifica se há laço
-        if (arestas.contains(vertice.rotulo)) {
+      // Verifica duplicação entre as arestas
+      for (int j = 0; j < arestas.size() - 1; j++) {
+        for (int k = j + 1; k < arestas.size(); k++) {
+          if (arestas.get(j).equals(arestas.get(k))) {
             simples = false;
             break;
+          }
         }
+        if (!simples) {
+          break;
+        }
+      }
+
+      // Verifica se há laço
+      if (arestas.contains(vertice.rotulo)) {
+        simples = false;
+        break;
+      }
     }
 
     if (!simples) {
-        System.out.println("Não é um grafo simples");
+      System.out.println("Não é um grafo simples");
     } else {
-        System.out.println("É um grafo simples");
+      System.out.println("É um grafo simples");
     }
     System.out.println();
-}
-
+  }
 
   public static void grafoRegular(ArrayList<Vertices> grafo, int[] grauTotalV) {
     boolean regular = true;
@@ -324,35 +323,6 @@ public class ListaAdjDirecionado {
     }
   }
 
-  public static ArrayList<Vertices> ponderador(ArrayList<Vertices> grafo) {
-    Scanner sc = new Scanner(System.in);
-
-
-    ArrayList<Vertices> copia = new ArrayList<Vertices>(grafo.size());
-
-    System.out.println(copia);
-
-
-    for (Vertices vertice : grafo) {
-      System.out.println(copia);
-      copia.add(new Vertices(vertice.rotulo));
-    }
-
-    for (int i = 0; i < copia.size(); i++) {
-      Vertices vertice = copia.get(i);
-      System.out.println("bbb");
-      for (Integer vizinho : vertice.arestas) {
-        System.out.println("aaaaa");
-        System.out.println("Adicione o peso para " + (vertice.rotulo) + "," + (vizinho + 1) + ":");
-        String peso = sc.nextLine();
-        copia.get(i).arestas.add(Integer.parseInt(peso));
-      }
-    }
-    return copia;
-  }
-
-  
-
   public static void menu() {
     Scanner sc = new Scanner(System.in);
 
@@ -478,7 +448,6 @@ public class ListaAdjDirecionado {
           break;
         }
         case 9: {
-          ArrayList<Vertices> copia = ponderador(grafo);
 
           break;
         }
