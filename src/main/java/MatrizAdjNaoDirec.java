@@ -415,8 +415,8 @@ public class MatrizAdjNaoDirec {
         System.out.println("[ 6 ] - Verificação do Grafo");
         System.out.println("[ 7 ] - Busca em Largura");
         System.out.println("[ 8 ] - Busca em Profundidade");
-        System.out.println("[ 9 ] - Árvore Geradora Mínima**");
-        System.out.println("[ 10 ] - Caminho mínimo entre dois vértices**");
+        System.out.println("[ 9 ] - Árvore Geradora Mínima");
+        System.out.println("[ 10 ] - Caminho mínimo entre dois vértices");
         System.out.println("[ 0 ] - Sair");
         System.out.println("Qual opção você deseja? ");
         op = sc.nextInt();
